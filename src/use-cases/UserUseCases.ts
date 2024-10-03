@@ -1,8 +1,12 @@
 import { User } from '../domain/entities/User';
+import { IHashRepository } from '../domain/interfaces/IHashRepository';
 import { IUserRepository } from '../domain/interfaces/IUserRepository';
 
 export class UserUseCases {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(
+    private userRepository: IUserRepository,
+    private hashRepository: IHashRepository,
+  ) {}
 
   async findAll(): Promise<User[]> {
     return this.userRepository.findAll();
@@ -17,7 +21,12 @@ export class UserUseCases {
   }
 
   async create(user: User): Promise<User> {
-    return this.userRepository.create(user);
+    const newUser: User = {
+      ...user,
+      password: await this.hashRepository.hashPassword(user.password),
+    };
+
+    return this.userRepository.create(newUser);
   }
 
   async update(id: string, user: User): Promise<User | null> {

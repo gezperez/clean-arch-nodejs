@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { userRoutes } from './interface/routes/userRoutes';
 import { MongoConnection } from './infrastructure/database/MongoDB';
 import { setupSwagger } from './interface/middleware/swagger';
+import { authRoutes } from './interface/routes/authRoutes';
 dotenv.config();
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 setupSwagger(app);
 
 app.use('/api', userRoutes);
+app.use('/api', authRoutes);
 
 app.listen(API_PORT, () => {
   console.log(`Server is running on port ${API_PORT}`);

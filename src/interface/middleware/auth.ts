@@ -4,7 +4,7 @@ import { User } from '../../domain/entities/User';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export const generateToken = (user) => {
+export const generateToken = (user: User) => {
   return jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
 };
 

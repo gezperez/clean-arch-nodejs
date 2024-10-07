@@ -1,10 +1,10 @@
 import { Expense } from '../entities/Expense';
 
 export interface FindByFilterProps {
-  userId: number;
-  cursor: string | null;
-  limit: number;
-  searchString: string;
+  userId: string;
+  cursor?: string | null;
+  limit?: number;
+  searchString?: string;
 }
 
 export interface IExpenseRepository {

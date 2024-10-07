@@ -9,7 +9,7 @@ export class AIController {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await this.aiCases.generatePrompt(
         req.body.question,
-        req.body.data,
+        req.params.id,
       );
 
       const data = response?.data?.candidates[0].content.parts[0];

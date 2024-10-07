@@ -8,6 +8,8 @@ import { setupSwagger } from './interface/middleware/swagger';
 import { authRoutes } from './interface/routes/authRoutes';
 import { aiRoutes } from './interface/routes/aiRoutes';
 import { expenseRoutes } from './interface/routes/expenseRoutes';
+import { categoryRoutes } from './interface/routes/categoryRoutes';
+
 dotenv.config();
 
 const app = express();
@@ -29,6 +31,7 @@ app.use('/api', userRoutes);
 app.use('/api', authRoutes);
 app.use('/api', aiRoutes);
 app.use('/api', expenseRoutes);
+app.use('/api', categoryRoutes);
 
 app.listen(API_PORT, () => {
   console.log(`Server is running on port ${API_PORT}`);

@@ -1,4 +1,4 @@
-import { AIUseCases } from '../../use-cases/AIUserCases';
+import { AIUseCases } from '../../use-cases/AIUseCases';
 import { Request, Response } from 'express';
 
 export class AIController {

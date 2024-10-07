@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { AIController } from '../controllers/AIController';
 import { GeminiAIRepository } from '../../infrastructure/repositories/GeminiAIRepository';
-import { AIUseCases } from '../../use-cases/AIUserCases';
+import { AIUseCases } from '../../use-cases/AIUseCases';
 
 const router = Router();
 

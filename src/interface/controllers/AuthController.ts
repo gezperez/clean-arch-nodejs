@@ -1,5 +1,5 @@
 import { IHashRepository } from '../../domain/interfaces/IHashRepository';
-import { AuthUseCases } from '../../use-cases/AuthUserCases';
+import { AuthUseCases } from '../../use-cases/AuthUseCases';
 import { Request, Response } from 'express';
 import { UserUseCases } from '../../use-cases/UserUseCases';
 

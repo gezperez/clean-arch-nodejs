@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/AuthController';
-import { AuthUseCases } from '../../use-cases/AuthUserCases';
+import { AuthUseCases } from '../../use-cases/AuthUseCases';
 import { UserDIContainer } from '../../infrastructure/containers/UserDIContainer';
 import { JWTRepository } from '../../infrastructure/repositories/JWTRepository';
 import { ArgonRepository } from '../../infrastructure/repositories/ArgonRepository';

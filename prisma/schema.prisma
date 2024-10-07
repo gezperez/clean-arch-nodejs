@@ -31,3 +31,10 @@ model Expense {
   amount    Float
   date DateTime
 }
+
+model Category {
+  id       String   @id @default(uuid())
+  name     String
+  iconName String
+  color String
+}

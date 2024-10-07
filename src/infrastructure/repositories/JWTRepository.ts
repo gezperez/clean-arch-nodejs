@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { User } from '../../../domain/entities/User';
-import { IAuthRepository } from '../../../domain/interfaces/IAuthRepository';
 import * as argon2 from 'argon2';
+import { IAuthRepository } from '../../domain/interfaces/IAuthRepository';
+import { User } from '../../domain/entities/User';
 
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;

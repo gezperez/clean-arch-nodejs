@@ -22,3 +22,12 @@ model User {
   currency String
   password String
 }
+
+model Expense {
+  id       String   @id @default(uuid())
+  userId String
+  categoryId    String   
+  name     String
+  amount    Float
+  date DateTime
+}

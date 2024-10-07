@@ -38,7 +38,6 @@ export class AuthController {
       const response = await this.authUseCases.login(req.body);
       res.json(response);
     } catch (error) {
-      console.log('aca', error);
 
       res.status(400).json({
         errorCode: 400,

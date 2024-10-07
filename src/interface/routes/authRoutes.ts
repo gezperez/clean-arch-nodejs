@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/AuthController';
 import { AuthUseCases } from '../../use-cases/AuthUserCases';
-import { JWTRepository } from '../../infrastructure/repositories/jwt/JWTRepository';
-import { ArgonRepository } from '../../infrastructure/repositories/hash/ArgonRepository';
 import { UserDIContainer } from '../../infrastructure/containers/UserDIContainer';
+import { JWTRepository } from '../../infrastructure/repositories/JWTRepository';
+import { ArgonRepository } from '../../infrastructure/repositories/ArgonRepository';
 
 const router = Router();
 

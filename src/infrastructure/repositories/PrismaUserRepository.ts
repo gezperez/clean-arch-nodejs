@@ -1,6 +1,6 @@
-import { User } from '../../../domain/entities/User';
-import { IUserRepository } from '../../../domain/interfaces/IUserRepository';
-import prisma from '../../models/PrismaClient';
+import { User } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/interfaces/IUserRepository';
+import prisma from '../models/PrismaClient';
 
 export class PrismaUserRepository implements IUserRepository {
   findAll(): Promise<User[]> {
@@ -15,7 +15,7 @@ export class PrismaUserRepository implements IUserRepository {
     return prisma.user.findUnique({ where: { email } });
   }
 
-  async create(user: User): Promise<User> {
+  create(user: User): Promise<User> {
     return prisma.user.create({
       data: user,
     });

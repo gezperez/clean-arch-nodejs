@@ -17,7 +17,7 @@ export class UserController {
   }
 
   async getById(req: Request, res: Response) {
-    const user = await this.userUseCases.findById(req.params.id);
+    const user = await this.userUseCases.findById(req.params.id as string);
     if (user) {
       res.json(user);
     } else {
@@ -55,19 +55,23 @@ export class UserController {
   }
 
   async update(req: Request, res: Response) {
-    const user = await this.userUseCases.update(req.params.id, req.body);
-    if (user) {
-      res.json(user);
-    } else {
+    const userExists = await this.userUseCases.findById(req.params.id);
+
+    if (!userExists) {
       res.status(404).json({
         errorCode: 404,
         message: 'User not found',
       });
+      return;
     }
+
+    const user = await this.userUseCases.update(req.params.id, req.body);
+
+    res.json(user);
   }
 
   async delete(req: Request, res: Response) {
-    await this.userUseCases.delete(req.params.id);
+    await this.userUseCases.delete(req.query.id as string);
     res.sendStatus(204);
   }
 }

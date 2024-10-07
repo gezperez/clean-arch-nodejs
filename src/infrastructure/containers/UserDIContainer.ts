@@ -1,7 +1,7 @@
 import { UserUseCases } from '../../use-cases/UserUseCases';
-import { ArgonRepository } from '../repositories/hash/ArgonRepository';
-import { MongoUserRepository } from '../repositories/user/MongoRepository';
-import { PrismaUserRepository } from '../repositories/user/PrismaRepository';
+import { ArgonRepository } from '../repositories/ArgonRepository';
+import { MongoUserRepository } from '../repositories/MongoUserRepository';
+import { PrismaUserRepository } from '../repositories/PrismaUserRepository';
 
 const useMongo = process.env.DB_TYPE === 'mongo';
 

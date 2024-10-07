@@ -1,6 +1,6 @@
-import { User } from '../../../domain/entities/User';
-import { IUserRepository } from '../../../domain/interfaces/IUserRepository';
-import { UserModel } from '../../models/UserModel';
+import { User } from "@prisma/client";
+import { IUserRepository } from "../../domain/interfaces/IUserRepository";
+import { UserModel } from "../models/UserModel";
 
 export class MongoUserRepository implements IUserRepository {
   async findAll(): Promise<User[]> {

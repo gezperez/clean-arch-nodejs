@@ -1,5 +1,6 @@
 import { Category } from '../domain/entities/Category';
 import { ICategoryRepository } from '../domain/interfaces/ICategoryRepository';
+import { HttpError } from '../interface/middleware/error';
 
 export class CategoryUseCases {
   constructor(private categoryRepository: ICategoryRepository) {}
@@ -9,7 +10,13 @@ export class CategoryUseCases {
   }
 
   async findById(id: string): Promise<Category | null> {
-    return this.categoryRepository.findById(id);
+    const category = await this.categoryRepository.findById(id);
+
+    if (!category) {
+      throw new HttpError(404, 'Category not found');
+    }
+
+    return category;
   }
 
   async create(category: Category): Promise<Category> {
@@ -17,6 +24,12 @@ export class CategoryUseCases {
   }
 
   async update(id: string, category: Category): Promise<Category | null> {
+    const foundCategory = await this.categoryRepository.findById(id);
+
+    if (!foundCategory) {
+      throw new HttpError(404, 'Category not found');
+    }
+
     return this.categoryRepository.update(id, category);
   }
 

@@ -5,7 +5,7 @@ import { authenticateToken } from '../middleware/auth';
 
 const router = Router();
 
-const expenseUseCases = ExpenseDIContainer.getExpenseUseCases();
+const expenseUseCases = ExpenseDIContainer.getUseCases();
 
 const expenseController = new ExpenseController(expenseUseCases);
 
@@ -19,24 +19,24 @@ const expenseController = new ExpenseController(expenseUseCases);
  *       200:
  *         description: Successful response with a list of expenses.
  */
-router.get('/expenses', authenticateToken, (req, res) =>
-  expenseController.getByFilter(req, res),
+router.get('/expenses', authenticateToken, (req, res, next) =>
+  expenseController.findByFilter(req, res, next),
 );
 
-router.get('/expenses/:id', authenticateToken, (req, res) =>
-  expenseController.getById(req, res),
+router.get('/expenses/:id', authenticateToken, (req, res, next) =>
+  expenseController.findById(req, res, next),
 );
 
-router.post('/expenses/:id', authenticateToken, (req, res) =>
-  expenseController.create(req, res),
+router.post('/expenses/:id', authenticateToken, (req, res, next) =>
+  expenseController.create(req, res, next),
 );
 
-router.patch('/expenses/:id', authenticateToken, (req, res) =>
-  expenseController.update(req, res),
+router.patch('/expenses/:id', authenticateToken, (req, res, next) =>
+  expenseController.update(req, res, next),
 );
 
-router.delete('/expenses/:id', authenticateToken, (req, res) =>
-  expenseController.delete(req, res),
+router.delete('/expenses/:id', authenticateToken, (req, res, next) =>
+  expenseController.delete(req, res, next),
 );
 
 export { router as expenseRoutes };

@@ -9,8 +9,12 @@ class ExpenseDIContainer {
     ? new MongoExpenseRepository()
     : new PrismaExpenseRepository();
 
-  static getExpenseUseCases() {
+  static getUseCases() {
     return new ExpenseUseCases(this._expenseRepository);
+  }
+
+  static getRepository() {
+    return this._expenseRepository;
   }
 }
 

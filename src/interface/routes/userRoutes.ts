@@ -5,7 +5,7 @@ import { UserDIContainer } from '../../infrastructure/containers/UserDIContainer
 
 const router = Router();
 
-const userUseCases = UserDIContainer.getUserUseCases();
+const userUseCases = UserDIContainer.getUseCases();
 
 const userController = new UserController(userUseCases);
 
@@ -19,22 +19,24 @@ const userController = new UserController(userUseCases);
  *       200:
  *         description: Successful response with a list of users.
  */
-router.get('/users', authenticateToken, (req, res) =>
-  userController.getAll(req, res),
+router.get('/users', authenticateToken, (req, res, next) =>
+  userController.findAll(req, res, next),
 );
 
-router.get('/users/:id', authenticateToken, (req, res) =>
-  userController.getById(req, res),
+router.get('/users/:id', authenticateToken, (req, res, next) =>
+  userController.findById(req, res, next),
 );
 
-router.post('/users', (req, res) => userController.create(req, res));
-
-router.patch('/users/:id', authenticateToken, (req, res) =>
-  userController.update(req, res),
+router.post('/users', (req, res, next) =>
+  userController.create(req, res, next),
 );
 
-router.delete('/users/:id', authenticateToken, (req, res) =>
-  userController.delete(req, res),
+router.patch('/users/:id', authenticateToken, (req, res, next) =>
+  userController.update(req, res, next),
+);
+
+router.delete('/users/:id', authenticateToken, (req, res, next) =>
+  userController.delete(req, res, next),
 );
 
 export { router as userRoutes };

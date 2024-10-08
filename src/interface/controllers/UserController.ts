@@ -1,77 +1,63 @@
 import { validate } from 'class-validator';
 import { UserUseCases } from '../../use-cases/UserUseCases';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { CreateUserDTO } from '../../domain/dtos/UserDTO';
-import { EmailUseCases } from '../../use-cases/EmailUseCases';
+import { HttpError } from '../middleware/error';
 
 export class UserController {
-  private emailUseCases: EmailUseCases;
+  constructor(private userUseCases: UserUseCases) {}
 
-  constructor(private userUseCases: UserUseCases) {
-    this.emailUseCases = new EmailUseCases(userUseCases);
+  async findAll(_: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await this.userUseCases.findAll();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  async getAll(req: Request, res: Response) {
-    const users = await this.userUseCases.findAll();
-    res.json(users);
-  }
+  async findById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userUseCases.findById(req.params.id as string);
 
-  async getById(req: Request, res: Response) {
-    const user = await this.userUseCases.findById(req.params.id as string);
-    if (user) {
       res.json(user);
-    } else {
-      res.status(404).json({
-        errorCode: 404,
-        message: 'User not found',
-      });
+    } catch (error) {
+      next(error);
     }
   }
 
-  async create(req: Request, res: Response) {
-    const dto = Object.assign(new CreateUserDTO(), req.body);
-    const errors = await validate(dto);
+  async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const dto = Object.assign(new CreateUserDTO(), req.body);
+      const errors = await validate(dto);
 
-    if (errors.length > 0) {
-      res.status(400).json({
-        errorCode: 400,
-        message: { errors },
-      });
-      return;
+      if (errors.length > 0) {
+        throw new HttpError(400, errors.toString());
+      }
+
+      const user = await this.userUseCases.create(req.body);
+      res.json(user);
+    } catch (error) {
+      next(error);
     }
-
-    const userExists = await this.emailUseCases.validateEmail(dto.email);
-
-    if (userExists) {
-      res.status(409).json({
-        errorCode: 409,
-        message: 'User already exists',
-      });
-      return;
-    }
-
-    const user = await this.userUseCases.create(req.body);
-    res.status(201).json(user);
   }
 
-  async update(req: Request, res: Response) {
-    const userExists = await this.userUseCases.findById(req.params.id);
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userUseCases.update(req.params.id, req.body);
 
-    if (!userExists) {
-      res.status(404).json({
-        errorCode: 404,
-        message: 'User not found',
-      });
-      return;
+      res.json(user);
+    } catch (error) {
+      next(error);
     }
-
-    const user = await this.userUseCases.update(req.params.id, req.body);
-
-    res.json(user);
   }
 
-  async delete(req: Request, res: Response) {
-    await this.userUseCases.delete(req.query.id as string);
-    res.sendStatus(204);
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      await this.userUseCases.delete(req.query.id as string);
+      res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
   }
 }

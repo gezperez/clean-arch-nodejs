@@ -9,6 +9,7 @@ import { authRoutes } from './interface/routes/authRoutes';
 import { aiRoutes } from './interface/routes/aiRoutes';
 import { expenseRoutes } from './interface/routes/expenseRoutes';
 import { categoryRoutes } from './interface/routes/categoryRoutes';
+import { errorHandler } from './interface/middleware/error';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use('/api', authRoutes);
 app.use('/api', aiRoutes);
 app.use('/api', expenseRoutes);
 app.use('/api', categoryRoutes);
+
+app.use(errorHandler);
 
 app.listen(API_PORT, () => {
   console.log(`Server is running on port ${API_PORT}`);

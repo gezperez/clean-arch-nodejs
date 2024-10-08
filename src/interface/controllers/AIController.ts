@@ -1,27 +1,19 @@
 import { AIUseCases } from '../../use-cases/AIUseCases';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export class AIController {
   constructor(private aiCases: AIUseCases) {}
 
-  async generatePrompt(req: Request, res: Response) {
+  async generatePrompt(req: Request, res: Response, next: NextFunction) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response: any = await this.aiCases.generatePrompt(
+      const response = await this.aiCases.generatePrompt(
         req.body.question,
         req.params.id,
       );
 
-      const data = response?.data?.candidates[0].content.parts[0];
-
-      console.log(JSON.stringify(data, null, 2));
-
-      res.json(data);
+      res.json(response);
     } catch (error) {
-      res.status(400).json({
-        errorCode: 400,
-        message: error,
-      });
+      next(error);
     }
   }
 }

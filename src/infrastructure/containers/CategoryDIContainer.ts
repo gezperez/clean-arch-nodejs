@@ -9,8 +9,12 @@ class CategoryDIContainer {
     ? new MongoCategoryRepository()
     : new PrismaCategoryRepository();
 
-  static getCategoryUseCases() {
+  static getUseCases() {
     return new CategoryUseCases(this._categoryRepository);
+  }
+
+  static getRepository() {
+    return this._categoryRepository;
   }
 }
 

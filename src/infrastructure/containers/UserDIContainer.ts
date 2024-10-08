@@ -12,11 +12,11 @@ class UserDIContainer {
 
   private static _hashRepository = new ArgonRepository();
 
-  static getUserUseCases() {
+  static getUseCases() {
     return new UserUseCases(this._userRepository, this._hashRepository);
   }
 
-  static getUserRepository() {
+  static getRepository() {
     return this._userRepository;
   }
 }

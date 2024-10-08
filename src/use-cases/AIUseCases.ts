@@ -1,15 +1,21 @@
 import { IAIRepository } from '../domain/interfaces/IAIRepository';
-import { ExpenseUseCases } from './ExpenseUseCases';
+import { IExpenseRepository } from '../domain/interfaces/IExpenseRepository';
 
 export class AIUseCases {
   constructor(
     private aiRepository: IAIRepository,
-    private expenseUseCases: ExpenseUseCases,
+    private expenseRepository: IExpenseRepository,
   ) {}
 
   async generatePrompt(question: string, userId: string): Promise<string> {
-    const expenses = await this.expenseUseCases.findByFilter({ userId });
+    const expenses = await this.expenseRepository.findByFilter({ userId });
 
-    return this.aiRepository.generatePrompt(question, expenses.data);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response: any = await this.aiRepository.generatePrompt(
+      question,
+      expenses.data,
+    );
+
+    return response?.data?.candidates[0].content.parts[0];
   }
 }

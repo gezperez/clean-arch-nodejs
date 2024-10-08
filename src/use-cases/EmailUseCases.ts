@@ -1,3 +1,4 @@
+import { HttpError } from '../interface/middleware/error';
 import { UserUseCases } from './UserUseCases';
 
 export class EmailUseCases {
@@ -10,6 +11,6 @@ export class EmailUseCases {
       return true;
     }
 
-    return false;
+    throw new HttpError(404, 'User not found');
   }
 }

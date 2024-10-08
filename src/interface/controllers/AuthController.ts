@@ -1,51 +1,19 @@
-import { IHashRepository } from '../../domain/interfaces/IHashRepository';
 import { AuthUseCases } from '../../use-cases/AuthUseCases';
-import { Request, Response } from 'express';
-import { UserUseCases } from '../../use-cases/UserUseCases';
+import { NextFunction, Request, Response } from 'express';
 
 export class AuthController {
-  constructor(
-    private authUseCases: AuthUseCases,
-    private hashRepository: IHashRepository,
-    private userUseCases: UserUseCases,
-  ) {}
+  constructor(private authUseCases: AuthUseCases) {}
 
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await this.userUseCases.findByEmail(req.body.email);
-
-      const isPasswordValid = await this.hashRepository.verifyPassword(
-        user.password,
-        req.body.password,
-      );
-
-      if (!user) {
-        res.status(404).json({
-          errorCode: 404,
-          message: 'User not found',
-        });
-        return;
-      }
-
-      if (!isPasswordValid) {
-        res.status(400).json({
-          errorCode: 400,
-          message: 'Invalid credentials',
-        });
-        return;
-      }
-
       const response = await this.authUseCases.login(req.body);
       res.json(response);
     } catch (error) {
-      res.status(400).json({
-        errorCode: 400,
-        message: error,
-      });
+      next(error);
     }
   }
 
-  async refreshAccessToken(req: Request, res: Response) {
+  async refreshAccessToken(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await this.authUseCases.refreshAccessToken(
         req.body.refreshToken,
@@ -53,10 +21,7 @@ export class AuthController {
 
       res.json(response);
     } catch (error) {
-      res.status(400).json({
-        errorCode: 400,
-        message: error,
-      });
+      next(error);
     }
   }
 }

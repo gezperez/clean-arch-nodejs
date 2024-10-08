@@ -5,7 +5,7 @@ import { CategoryController } from '../controllers/CategoryController';
 
 const router = Router();
 
-const categoryUseCases = CategoryDIContainer.getCategoryUseCases();
+const categoryUseCases = CategoryDIContainer.getUseCases();
 
 const categoryController = new CategoryController(categoryUseCases);
 
@@ -19,24 +19,24 @@ const categoryController = new CategoryController(categoryUseCases);
  *       200:
  *         description: Successful response with a list of categories.
  */
-router.get('/category', authenticateToken, (req, res) =>
-  categoryController.getAll(req, res),
+router.get('/category', authenticateToken, (req, res, next) =>
+  categoryController.findAll(req, res, next),
 );
 
-router.get('/category/:id', authenticateToken, (req, res) =>
-  categoryController.getById(req, res),
+router.get('/category/:id', authenticateToken, (req, res, next) =>
+  categoryController.findById(req, res, next),
 );
 
-router.post('/category', authenticateToken, (req, res) =>
-  categoryController.create(req, res),
+router.post('/category', authenticateToken, (req, res, next) =>
+  categoryController.create(req, res, next),
 );
 
-router.patch('/category/:id', authenticateToken, (req, res) =>
-  categoryController.update(req, res),
+router.patch('/category/:id', authenticateToken, (req, res, next) =>
+  categoryController.update(req, res, next),
 );
 
-router.delete('/category/:id', authenticateToken, (req, res) =>
-  categoryController.delete(req, res),
+router.delete('/category/:id', authenticateToken, (req, res, next) =>
+  categoryController.delete(req, res, next),
 );
 
 export { router as categoryRoutes };

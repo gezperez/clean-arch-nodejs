@@ -19,13 +19,21 @@ const expenseController = new ExpenseController(expenseUseCases);
  *       200:
  *         description: Successful response with a list of expenses.
  */
-router.get('/expenses', (req, res) => expenseController.getByFilter(req, res));
+router.get('/expenses', authenticateToken, (req, res) =>
+  expenseController.getByFilter(req, res),
+);
 
-router.get('/expenses/:id', (req, res) => expenseController.getById(req, res));
+router.get('/expenses/:id', authenticateToken, (req, res) =>
+  expenseController.getById(req, res),
+);
 
-router.post('/expenses/:id', (req, res) => expenseController.create(req, res));
+router.post('/expenses/:id', authenticateToken, (req, res) =>
+  expenseController.create(req, res),
+);
 
-router.patch('/expenses/:id', (req, res) => expenseController.update(req, res));
+router.patch('/expenses/:id', authenticateToken, (req, res) =>
+  expenseController.update(req, res),
+);
 
 router.delete('/expenses/:id', authenticateToken, (req, res) =>
   expenseController.delete(req, res),

@@ -1,22 +1,21 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import * as argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 import { IAuthRepository } from '../../domain/interfaces/IAuthRepository';
 import { User } from '../../domain/entities/User';
-
-const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+import { JWTPayload } from '../../domain/entities/JWT';
 
 export class JWTRepository implements IAuthRepository {
-  refreshAccessToken(token: string): string | JwtPayload {
-    return jwt.verify(token, JWT_REFRESH_SECRET);
+  verifyAccessToken(token: string): string | JWTPayload {
+    return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+  }
+  verifyRefreshToken(token: string): string | JWTPayload {
+    return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
   }
   generateAccessToken(user: User): string {
-    return jwt.sign(user, JWT_ACCESS_SECRET, { expiresIn: '15m' });
+    return jwt.sign(user, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
   }
   generateRefreshToken(user: User): string {
-    return jwt.sign({ id: user.id }, JWT_REFRESH_SECRET, { expiresIn: '7d' });
-  }
-  hashPassword(password: string): Promise<string> {
-    return argon2.hash(password);
+    return jwt.sign({ email: user.email }, process.env.JWT_REFRESH_SECRET, {
+      expiresIn: '7d',
+    });
   }
 }

@@ -19,13 +19,19 @@ const userController = new UserController(userUseCases);
  *       200:
  *         description: Successful response with a list of users.
  */
-router.get('/users', (req, res) => userController.getAll(req, res));
+router.get('/users', authenticateToken, (req, res) =>
+  userController.getAll(req, res),
+);
 
-router.get('/users/:id', (req, res) => userController.getById(req, res));
+router.get('/users/:id', authenticateToken, (req, res) =>
+  userController.getById(req, res),
+);
 
 router.post('/users', (req, res) => userController.create(req, res));
 
-router.patch('/users/:id', (req, res) => userController.update(req, res));
+router.patch('/users/:id', authenticateToken, (req, res) =>
+  userController.update(req, res),
+);
 
 router.delete('/users/:id', authenticateToken, (req, res) =>
   userController.delete(req, res),

@@ -38,7 +38,21 @@ export class AuthController {
       const response = await this.authUseCases.login(req.body);
       res.json(response);
     } catch (error) {
+      res.status(400).json({
+        errorCode: 400,
+        message: error,
+      });
+    }
+  }
 
+  async refreshAccessToken(req: Request, res: Response) {
+    try {
+      const response = await this.authUseCases.refreshAccessToken(
+        req.body.refreshToken,
+      );
+
+      res.json(response);
+    } catch (error) {
       res.status(400).json({
         errorCode: 400,
         message: error,

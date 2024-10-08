@@ -6,5 +6,3 @@ export class AuthResponse {
     public refreshToken: string,
   ) {}
 }
-
-

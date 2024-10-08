@@ -15,6 +15,10 @@ class UserDIContainer {
   static getUserUseCases() {
     return new UserUseCases(this._userRepository, this._hashRepository);
   }
+
+  static getUserRepository() {
+    return this._userRepository;
+  }
 }
 
 export { UserDIContainer };

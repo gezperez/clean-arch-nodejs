@@ -1,16 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import { User } from '../../domain/entities/User';
+import { JWTRepository } from '../../infrastructure/repositories/JWTRepository';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
-export const generateToken = (user: User) => {
-  return jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
-};
-
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET);
-};
+const jwtRepository = new JWTRepository();
 
 const extractTokenFromHeader = (req: Request): string | undefined => {
   return req.header('Authorization')?.split(' ')[1];
@@ -32,10 +23,14 @@ export const authenticateToken = (
   }
 
   try {
-    const user = verifyToken(token);
-    req['user'] = user as User;
+    const user = jwtRepository.verifyAccessToken(token);
+
+    req['user'] = user;
     next();
   } catch {
-    res.sendStatus(403);
+    res.status(403).json({
+      errorCode: 403,
+      message: 'Unauthorized',
+    });
   }
 };

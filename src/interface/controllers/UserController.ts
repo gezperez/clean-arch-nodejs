@@ -3,9 +3,13 @@ import { UserUseCases } from '../../use-cases/UserUseCases';
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDTO } from '../../domain/dtos/UserDTO';
 import { HttpError } from '../middleware/error';
+import { AuthUseCases } from '../../use-cases/AuthUseCases';
 
 export class UserController {
-  constructor(private userUseCases: UserUseCases) {}
+  constructor(
+    private userUseCases: UserUseCases,
+    private authUseCases: AuthUseCases,
+  ) {}
 
   async findAll(_: Request, res: Response, next: NextFunction) {
     try {
@@ -36,8 +40,15 @@ export class UserController {
       }
 
       const user = await this.userUseCases.create(req.body);
-      res.json(user);
+
+      const authResponse = await this.authUseCases.login({
+        ...user,
+        password: req.body.password,
+      });
+
+      res.json(authResponse);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -56,6 +67,30 @@ export class UserController {
     try {
       await this.userUseCases.delete(req.query.id as string);
       res.sendStatus(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addCurrency(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userUseCases.addCurrency(
+        req.params.id,
+        req.params.currency,
+      );
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteCurrency(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userUseCases.deleteCurrency(
+        req.params.id,
+        req.params.currency,
+      );
+      res.json(user);
     } catch (error) {
       next(error);
     }

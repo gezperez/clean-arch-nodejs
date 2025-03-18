@@ -1,6 +1,6 @@
-import { User } from "@prisma/client";
-import { IUserRepository } from "../../domain/interfaces/IUserRepository";
-import { UserModel } from "../models/UserModel";
+import { User } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/interfaces/IUserRepository';
+import { UserModel } from '../models/UserModel';
 
 export class MongoUserRepository implements IUserRepository {
   async findAll(): Promise<User[]> {
@@ -26,5 +26,13 @@ export class MongoUserRepository implements IUserRepository {
 
   async delete(id: string): Promise<User> {
     return UserModel.findByIdAndDelete(id);
+  }
+
+  async addCurrency(userId: string, currency: string): Promise<User> {
+    return UserModel.findByIdAndUpdate(userId, { $push: { currencies: currency } }, { new: true });
+  }
+
+  async deleteCurrency(userId: string, currency: string): Promise<User> {
+    return UserModel.findByIdAndUpdate(userId, { $pull: { currencies: currency } }, { new: true });
   }
 }

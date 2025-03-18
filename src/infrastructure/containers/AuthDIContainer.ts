@@ -8,12 +8,16 @@ class AuthDIContainer {
   private static _userRepository = UserDIContainer.getRepository();
   private static hashRepository = new ArgonRepository();
 
-  static getAuthUseCases() {
+  static getUseCases() {
     return new AuthUseCases(
       this._authRepository,
       this._userRepository,
       this.hashRepository,
     );
+  }
+
+  static getRepository() {
+    return this._authRepository;
   }
 }
 

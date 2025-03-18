@@ -9,14 +9,16 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev --name init"
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "yarn@4.1.1+sha512.ec40d0639bb307441b945d9467139cbb88d14394baac760b52eca038b330d16542d66fef61574271534ace5a200518dabf3b53a85f1f9e4bfa37141b538a9590",
   "dependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "^6.5.0",
+    "@types/uuid": "^10.0.0",
     "argon2": "^0.41.1",
     "axios": "^1.7.7",
     "class-transformer": "^0.5.1",
@@ -27,7 +29,8 @@
     "mongoose": "^8.7.0",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -44,7 +47,7 @@
     "globals": "^15.10.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
-    "prisma": "^5.20.0",
+    "prisma": "^6.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.8.0"

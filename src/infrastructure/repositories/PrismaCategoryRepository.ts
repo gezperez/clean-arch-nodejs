@@ -1,29 +1,41 @@
 import { Category } from '../../domain/entities/Category';
 import { ICategoryRepository } from '../../domain/interfaces/ICategoryRepository';
-import prisma from '../models/PrismaClient';
+import { prisma } from '../database/Prisma';
 
 export class PrismaCategoryRepository implements ICategoryRepository {
-  findAll(): Promise<Category[]> {
+  async findAll(): Promise<Category[]> {
     return prisma.category.findMany();
   }
 
-  findById(id: string): Promise<Category | null> {
+  async findById(id: string): Promise<Category | null> {
     return prisma.category.findUnique({ where: { id } });
   }
 
-  create(category: Category): Promise<Category> {
+  async create(category: Category): Promise<Category> {
     return prisma.category.create({
-      data: category,
+      data: {
+        id: category.id,
+        name: category.name,
+        iconName: category.iconName,
+        color: category.color,
+        updatedAt: new Date(),
+      },
     });
   }
 
-  update(id: string, category: Category): Promise<Category | null> {
+  async update(id: string, category: Category): Promise<Category> {
     return prisma.category.update({
       where: { id },
-      data: category,
+      data: {
+        name: category.name,
+        iconName: category.iconName,
+        color: category.color,
+        updatedAt: new Date(),
+      },
     });
   }
-  delete(id: string): Promise<Category> {
+
+  async delete(id: string): Promise<Category> {
     return prisma.category.delete({
       where: { id },
     });

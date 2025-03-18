@@ -3,7 +3,8 @@ import {
   FindByFilterProps,
   IExpenseRepository,
 } from '../../domain/interfaces/IExpenseRepository';
-import prisma from '../models/PrismaClient';
+import { prisma } from '../database/Prisma';
+import { Prisma } from '@prisma/client';
 
 export class PrismaExpenseRepository implements IExpenseRepository {
   async findByFilter({
@@ -16,18 +17,12 @@ export class PrismaExpenseRepository implements IExpenseRepository {
     count: number;
     hasMore: boolean;
   }> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: any = {
+    const where: Prisma.ExpenseWhereInput = {
       userId,
     };
 
     if (searchString) {
-      where.OR = [
-        { name: { contains: searchString, mode: 'insensitive' } },
-        { description: { contains: searchString, mode: 'insensitive' } },
-        { categoryName: { contains: searchString, mode: 'insensitive' } },
-        { amount: { equals: Number(searchString) } },
-      ];
+      where.OR = [{ amount: { equals: Number(searchString) } }];
     }
 
     const expenses = await prisma.expense.findMany({
@@ -45,27 +40,96 @@ export class PrismaExpenseRepository implements IExpenseRepository {
     const hasMore = expenses.length > limit;
     const data = hasMore ? expenses.slice(0, -1) : expenses;
 
-    return { data, count, hasMore };
+    return {
+      data: data.map(
+        (expense) =>
+          new Expense(
+            expense.id,
+            expense.userId,
+            expense.categoryId,
+            expense.name,
+            expense.amount,
+            expense.date,
+          ),
+      ),
+      count,
+      hasMore,
+    };
   }
 
-  findById(id: string): Promise<Expense | null> {
-    return prisma.expense.findUnique({ where: { id } });
+  async findById(id: string): Promise<Expense | null> {
+    const expense = await prisma.expense.findUnique({ where: { id } });
+    if (!expense) return null;
+
+    return new Expense(
+      expense.id,
+      expense.userId,
+      expense.categoryId,
+      expense.name,
+      expense.amount,
+      expense.date,
+    );
   }
 
-  create(userId: string, expense: Expense): Promise<Expense> {
-    return prisma.expense.create({
-      data: { ...expense, userId },
-    });
+  async create(userId: string, expense: Expense): Promise<Expense> {
+    const data: Prisma.ExpenseUncheckedCreateInput = {
+      id: expense.id,
+      userId,
+      categoryId: expense.categoryId,
+      name: expense.name,
+      amount: expense.amount,
+      date: expense.date,
+      updatedAt: new Date(),
+    };
+
+    const created = await prisma.expense.create({ data });
+
+    return new Expense(
+      created.id,
+      created.userId,
+      created.categoryId,
+      created.name,
+      created.amount,
+      created.date,
+    );
   }
-  update(id: string, expense: Expense): Promise<Expense> {
-    return prisma.expense.update({
+
+  async update(id: string, expense: Expense): Promise<Expense> {
+    const data: Prisma.ExpenseUncheckedUpdateInput = {
+      categoryId: expense.categoryId,
+      name: expense.name,
+      amount: expense.amount,
+      date: expense.date,
+      updatedAt: new Date(),
+    };
+
+    const updated = await prisma.expense.update({
       where: { id },
-      data: expense,
+      data,
     });
+
+    return new Expense(
+      updated.id,
+      updated.userId,
+      updated.categoryId,
+      updated.name,
+      updated.amount,
+      updated.date,
+    );
   }
-  delete(id: string): Promise<Expense> {
-    return prisma.expense.delete({
+
+  async delete(id: string): Promise<Expense> {
+    const deleted = await prisma.expense.delete({
       where: { id },
     });
+
+    return new Expense(
+      deleted.id,
+      deleted.userId,
+      deleted.categoryId,
+      deleted.name,
+      deleted.amount,
+      deleted.date,
+    );
   }
 }

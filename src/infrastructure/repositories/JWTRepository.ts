@@ -11,7 +11,15 @@ export class JWTRepository implements IAuthRepository {
     return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
   }
   generateAccessToken(user: User): string {
-    return jwt.sign(user, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' });
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      theme: user.theme,
+    };
+    return jwt.sign(userPayload, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: '15m',
+    });
   }
   generateRefreshToken(user: User): string {
     return jwt.sign({ email: user.email }, process.env.JWT_REFRESH_SECRET, {

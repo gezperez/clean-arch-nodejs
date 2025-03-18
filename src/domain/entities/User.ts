@@ -4,7 +4,7 @@ export class User {
     public name: string,
     public email: string,
     public theme: string,
-    public currency: string,
     public password: string,
+    public currencies: string[],
   ) {}
 }

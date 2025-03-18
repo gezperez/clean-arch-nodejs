@@ -10,7 +10,11 @@
     "build": "tsc",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name init",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "prepare": "husky install",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -45,11 +49,19 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.10.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
     "prisma": "^6.5.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.8.0"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

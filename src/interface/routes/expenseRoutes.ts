@@ -2,12 +2,15 @@ import { Router } from 'express';
 import { ExpenseDIContainer } from '../../infrastructure/containers/ExpenseDIContainer';
 import { ExpenseController } from '../controllers/ExpenseController';
 import { authenticateToken } from '../middleware/auth';
+import { AIIContainer } from '../../infrastructure/containers/AIDIContainer';
 
 const router = Router();
 
 const expenseUseCases = ExpenseDIContainer.getUseCases();
 
-const expenseController = new ExpenseController(expenseUseCases);
+const aiUseCases = AIIContainer.getUseCases();
+
+const expenseController = new ExpenseController(expenseUseCases, aiUseCases);
 
 /**
  * @swagger
@@ -29,6 +32,10 @@ router.get('/expenses/:id', authenticateToken, (req, res, next) =>
 
 router.post('/expenses/:id', authenticateToken, (req, res, next) =>
   expenseController.create(req, res, next),
+);
+
+router.post('/expenses/ai/:id', authenticateToken, (req, res, next) =>
+  expenseController.createWithAI(req, res, next),
 );
 
 router.patch('/expenses/:id', authenticateToken, (req, res, next) =>

@@ -2,11 +2,13 @@ import { ConversionRates } from '../../domain/entities/Currency';
 import axios, { AxiosResponse } from 'axios';
 import { environment } from '../../interface/middleware/environment';
 import { BlueRateResponse, RatesResponse } from '../../domain/responses/Rate';
+import { IRateService } from '../../domain/interfaces/IRateService';
 
-export class RateService {
+export class RateService implements IRateService {
   async getBlueRate(): Promise<number> {
     const url = `${environment.usdApiUrl}`;
-    const response: AxiosResponse<BlueRateResponse, Error> = await axios.get(url);
+    const response: AxiosResponse<BlueRateResponse, Error> =
+      await axios.get(url);
     return response.data.compra;
   }
 

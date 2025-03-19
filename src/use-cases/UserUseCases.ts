@@ -24,7 +24,7 @@ export class UserUseCases {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const foundUser = this.userRepository.findByEmail(email);
+    const foundUser = await this.userRepository.findByEmail(email);
 
     if (!foundUser) {
       throw new HttpError(404, 'User not found');

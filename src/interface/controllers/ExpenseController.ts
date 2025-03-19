@@ -3,9 +3,13 @@ import { ExpenseUseCases } from '../../use-cases/ExpenseUseCases';
 import { CreateExpenseDTO } from '../../domain/dtos/ExpenseDTO';
 import { validate } from 'class-validator';
 import { HttpError } from '../middleware/error';
+import { AIUseCases } from '../../use-cases/AIUseCases';
 
 export class ExpenseController {
-  constructor(private expenseUseCases: ExpenseUseCases) {}
+  constructor(
+    private expenseUseCases: ExpenseUseCases,
+    private aiUseCases: AIUseCases,
+  ) {}
 
   async findByFilter(req: Request, res: Response, next: NextFunction) {
     try {
@@ -40,6 +44,19 @@ export class ExpenseController {
         req.body,
       );
       res.status(201).json(user);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  async createWithAI(req: Request, res: Response, next: NextFunction) {
+    try {
+      const expense = await this.aiUseCases.createWithAI(
+        req.params.id,
+        req.body.message,
+      );
+      res.status(201).json(expense);
     } catch (error) {
       console.log(error);
       next(error);

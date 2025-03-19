@@ -6,9 +6,9 @@ export class AIController {
 
   async generatePrompt(req: Request, res: Response, next: NextFunction) {
     try {
-      const response = await this.aiCases.generatePrompt(
-        req.body.question,
+      const response = await this.aiCases.createWithAI(
         req.params.id,
+        req.body.message,
       );
 
       res.json(response);

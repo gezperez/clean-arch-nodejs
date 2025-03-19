@@ -1,21 +1,25 @@
-import { IAIRepository } from '../domain/interfaces/IAIRepository';
+import { Expense } from '../domain/entities/Expense';
+import { IAIService } from '../domain/interfaces/IAIService';
+import { ICategoryRepository } from '../domain/interfaces/ICategoryRepository';
 import { IExpenseRepository } from '../domain/interfaces/IExpenseRepository';
-
 export class AIUseCases {
   constructor(
-    private aiRepository: IAIRepository,
+    private aiService: IAIService,
+    private categoryRepository: ICategoryRepository,
     private expenseRepository: IExpenseRepository,
   ) {}
 
-  async generatePrompt(question: string, userId: string): Promise<string> {
-    const expenses = await this.expenseRepository.findByFilter({ userId });
+  async createWithAI(userId: string, message: string): Promise<Expense> {
+    const categories = await this.categoryRepository.findAll();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: any = await this.aiRepository.generatePrompt(
-      question,
-      expenses.data,
+    const expense = await this.aiService.createWithAI(
+      userId,
+      message,
+      categories,
     );
 
-    return response?.data?.candidates[0].content.parts[0];
+    await this.expenseRepository.create(userId, expense);
+
+    return expense;
   }
 }

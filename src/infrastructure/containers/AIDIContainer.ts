@@ -1,17 +1,18 @@
 import { AIUseCases } from '../../use-cases/AIUseCases';
-import { GeminiAIRepository } from '../repositories/GeminiAIRepository';
-import { ExpenseDIContainer } from './ExpenseDIContainer';
-
+import { GeminiService } from '../services/GeminiService';
+import { PrismaCategoryRepository } from '../repositories/PrismaCategoryRepository';
+import { PrismaExpenseRepository } from '../repositories/PrismaExpenseRepository';
 class AIIContainer {
-  private static _aiRepository = new GeminiAIRepository();
-  private static _expenseRepository = ExpenseDIContainer.getRepository();
+  private static _aiService = new GeminiService();
+  private static _categoryRepository = new PrismaCategoryRepository();
+  private static _expenseRepository = new PrismaExpenseRepository();
 
   static getUseCases() {
-    return new AIUseCases(this._aiRepository, this._expenseRepository);
-  }
-
-  static getRepository() {
-    return this._aiRepository;
+    return new AIUseCases(
+      this._aiService,
+      this._categoryRepository,
+      this._expenseRepository,
+    );
   }
 }
 

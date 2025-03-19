@@ -1,4 +1,4 @@
-yarn lint
+yarn lint-staged
 yarn type-check
 yarn test
 

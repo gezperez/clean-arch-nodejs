@@ -1,7 +1,7 @@
 import { Category } from '../../domain/entities/Category';
 import { ICategoryRepository } from '../../domain/interfaces/ICategoryRepository';
 import { prisma } from '../database/Prisma';
-
+import { v4 as uuidv4 } from 'uuid';
 export class PrismaCategoryRepository implements ICategoryRepository {
   async findAll(): Promise<Category[]> {
     return prisma.category.findMany();
@@ -14,7 +14,7 @@ export class PrismaCategoryRepository implements ICategoryRepository {
   async create(category: Category): Promise<Category> {
     return prisma.category.create({
       data: {
-        id: category.id,
+        id: uuidv4(),
         name: category.name,
         iconName: category.iconName,
         color: category.color,

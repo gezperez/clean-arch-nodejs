@@ -41,6 +41,7 @@ export class ExpenseController {
       );
       res.status(201).json(user);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

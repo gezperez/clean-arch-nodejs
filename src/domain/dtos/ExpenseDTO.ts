@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDateString, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateExpenseDTO {
   @IsNotEmpty()
@@ -14,8 +14,6 @@ export class CreateExpenseDTO {
   @IsNumber()
   amount: number;
 
-  @IsNotEmpty()
-  @IsDateString()
   @Type(() => Date)
   date: Date;
 }

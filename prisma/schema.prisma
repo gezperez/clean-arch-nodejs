@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Expense {
-  id          String   @id
-  userId      String
-  categoryId  String
-  name        String
-  amount      Float
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  User        User     @relation(fields: [userId], references: [id])
-  Category    Category @relation(fields: [categoryId], references: [id])
+  id         String   @id
+  userId     String
+  categoryId String
+  name       String
+  amount     Float
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  User       User     @relation(fields: [userId], references: [id])
+  Category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Income {

@@ -1,1 +1,4 @@
-yarn lint && yarn type-check
+yarn lint
+yarn type-check
+yarn test
+

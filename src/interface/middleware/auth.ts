@@ -26,17 +26,17 @@ export const authenticateToken = (
     const user = jwtRepository.verifyAccessToken(token);
     req['user'] = user;
 
-    if (
+    /* if (
       req.params.id &&
       typeof user !== 'string' &&
       user.id !== req.params.id
     ) {
       res.status(403).json({
         errorCode: 403,
-        message: 'Unauthorized',
+        message: 'Unauthorized by Id',
       });
       return;
-    }
+    } */
 
     next();
   } catch {

@@ -13,6 +13,15 @@ export class AuthController {
     }
   }
 
+  async validateEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await this.authUseCases.validateEmail(req.params.email);
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async refreshAccessToken(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await this.authUseCases.refreshAccessToken(

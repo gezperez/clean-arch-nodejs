@@ -12,6 +12,7 @@ import { errorHandler } from './interface/middleware/error';
 import { environment } from './interface/middleware/environment';
 import { PrismaClient } from '@prisma/client';
 import { rateRoutes } from './interface/routes/rateRoutes';
+import { incomeRoutes } from './interface/routes/incomeRoutes';
 
 environment.validate();
 
@@ -46,6 +47,7 @@ app.use('/api', aiRoutes);
 app.use('/api', expenseRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', rateRoutes);
+app.use('/api', incomeRoutes);
 
 app.use(errorHandler);
 

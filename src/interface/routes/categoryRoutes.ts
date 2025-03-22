@@ -19,7 +19,7 @@ const categoryController = new CategoryController(categoryUseCases);
  *       200:
  *         description: Successful response with a list of categories.
  */
-router.get('/category', authenticateToken, (req, res, next) =>
+router.get('/category', (req, res, next) =>
   categoryController.findAll(req, res, next),
 );
 

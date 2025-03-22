@@ -21,15 +21,16 @@ model Expense {
 }
 
 model Income {
-  id          String   @id
-  amount      Float
-  source      String
-  description String
-  date        DateTime
-  userId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  User        User     @relation(fields: [userId], references: [id])
+  id         String   @id
+  userId     String
+  categoryId String
+  name       String
+  amount     Float
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  User       User     @relation(fields: [userId], references: [id])
+  Category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model RefreshToken {
@@ -66,4 +67,6 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime
   Expense   Expense[]
+  isIncome  Boolean   @default(false)
+  Income    Income[]
 }

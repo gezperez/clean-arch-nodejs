@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCategoryDTO {
   @IsNotEmpty()
@@ -12,6 +12,9 @@ export class CreateCategoryDTO {
   @IsNotEmpty()
   @IsString()
   color: string;
+
+  @IsBoolean()
+  isIncome: boolean = false;
 }
 
 export class UpdateCategoryDTO extends CreateCategoryDTO {

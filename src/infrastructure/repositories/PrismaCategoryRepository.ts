@@ -15,9 +15,7 @@ export class PrismaCategoryRepository implements ICategoryRepository {
     return prisma.category.create({
       data: {
         id: uuidv4(),
-        name: category.name,
-        iconName: category.iconName,
-        color: category.color,
+        ...category,
         updatedAt: new Date(),
       },
     });
@@ -27,9 +25,7 @@ export class PrismaCategoryRepository implements ICategoryRepository {
     return prisma.category.update({
       where: { id },
       data: {
-        name: category.name,
-        iconName: category.iconName,
-        color: category.color,
+        ...category,
         updatedAt: new Date(),
       },
     });

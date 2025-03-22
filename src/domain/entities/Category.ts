@@ -1,9 +1,9 @@
 export class Category {
-    constructor(
-      public id: string,
-      public name: string,
-      public iconName: string,
-      public color: string,
-    ) {}
-  }
-  
+  constructor(
+    public id: string,
+    public name: string,
+    public iconName: string,
+    public color: string,
+    public isIncome: boolean,
+  ) {}
+}

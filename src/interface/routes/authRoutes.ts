@@ -8,8 +8,10 @@ const authUseCases = AuthDIContainer.getUseCases();
 
 const authController = new AuthController(authUseCases);
 
-router.post('/auth', (req, res, next) =>
-  authController.login(req, res, next),
+router.post('/auth', (req, res, next) => authController.login(req, res, next));
+
+router.get('/auth/:email', (req, res, next) =>
+  authController.validateEmail(req, res, next),
 );
 
 router.post('/auth/refresh', (req, res, next) =>

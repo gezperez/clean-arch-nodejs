@@ -9,8 +9,20 @@ describe('GeminiService', () => {
   const mockApiKey = 'test-api-key';
   const mockUserId = 'user-123';
   const mockCategories: Category[] = [
-    { id: '1', name: 'Groceries', iconName: 'shopping-cart', color: '#4CAF50' },
-    { id: '2', name: 'Entertainment', iconName: 'movie', color: '#2196F3' },
+    {
+      id: '1',
+      name: 'Groceries',
+      iconName: 'shopping-cart',
+      color: '#4CAF50',
+      isIncome: false,
+    },
+    {
+      id: '2',
+      name: 'Entertainment',
+      iconName: 'movie',
+      color: '#2196F3',
+      isIncome: false,
+    },
   ];
 
   let service: GeminiService;

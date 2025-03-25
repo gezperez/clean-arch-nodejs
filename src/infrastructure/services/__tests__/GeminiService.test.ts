@@ -71,6 +71,7 @@ describe('GeminiService', () => {
       category: 'Groceries',
       name: 'Weekly groceries',
       date: '2024-03-20T10:00:00Z',
+      currency: 'USD',
     };
 
     beforeEach(() => {
@@ -91,11 +92,12 @@ describe('GeminiService', () => {
 
       expect(result).toEqual({
         id: '',
-        amount: 50.99,
+        amount: '50.99',
         categoryId: '1',
         name: 'Weekly groceries',
         date: new Date('2024-03-20T10:00:00Z'),
         userId: mockUserId,
+        currency: 'USD',
       });
     });
 

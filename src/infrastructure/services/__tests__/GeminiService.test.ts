@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GeminiService } from '../GeminiService';
 import { Category } from '../../../domain/entities/Category';
+import { Expense } from '../../../domain/entities/Expense';
 
 // Mock GoogleGenerativeAI
 jest.mock('@google/generative-ai');
@@ -66,12 +67,17 @@ describe('GeminiService', () => {
   });
 
   describe('createWithAI', () => {
-    const validResponse = {
-      amount: 50.99,
-      category: 'Groceries',
+    const validResponse: Expense = {
+      id: '1',
+      amount: '50.99',
       name: 'Weekly groceries',
-      date: '2024-03-20T10:00:00Z',
+      date: new Date('2024-03-20T10:00:00Z'),
       currency: 'USD',
+      categoryId: '1',
+      userId: mockUserId,
+      categoryName: 'Groceries',
+      recurrence: 'weekly',
+      description: '',
     };
 
     beforeEach(() => {
@@ -90,15 +96,7 @@ describe('GeminiService', () => {
         mockCategories,
       );
 
-      expect(result).toEqual({
-        id: '',
-        amount: '50.99',
-        categoryId: '1',
-        name: 'Weekly groceries',
-        date: new Date('2024-03-20T10:00:00Z'),
-        userId: mockUserId,
-        currency: 'USD',
-      });
+      expect(result).toEqual(validResponse);
     });
 
     it('should throw error for empty message', async () => {

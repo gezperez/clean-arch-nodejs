@@ -10,7 +10,11 @@ describe('RateUseCases', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRateService = jest.mocked(RateService.getInstance());
+    mockRateService = {
+      getRates: jest.fn(),
+      getBlueRate: jest.fn(),
+      fetchAndUpdateRates: jest.fn(),
+    } as unknown as jest.Mocked<RateService>;
     rateUseCases = new RateUseCases(mockRateService);
   });
 

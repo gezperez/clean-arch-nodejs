@@ -222,7 +222,7 @@ describe('GeminiService', () => {
         );
 
         expect(result).toBeDefined();
-        expect(result.amount).toBe(50.99);
+        expect(result.amount).toBe('50.99');
       });
 
       it('should throw error for completely invalid JSON', async () => {

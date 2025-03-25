@@ -19,6 +19,11 @@ export class RateService implements IRateService {
     return RateService.instance;
   }
 
+  // For testing purposes only
+  static resetInstance(): void {
+    RateService.instance = null as unknown as RateService;
+  }
+
   async getBlueRate(): Promise<number> {
     const url = `${environment.usdApiUrl}`;
     const response: AxiosResponse<BlueRateResponse, Error> =
@@ -51,12 +56,10 @@ export class RateService implements IRateService {
       return rates;
     } catch (error) {
       logger.error('Error fetching rates:', error);
-      // If we have cached rates and there's an error, return cached rates
-      if (this.cachedRates) {
-        logger.warn('Returning stale cached rates due to fetch error');
-        return this.cachedRates;
-      }
-      throw error;
+      // Remove the cached rates fallback and throw the error
+      throw error instanceof Error
+        ? error
+        : new Error('Unknown error fetching rates');
     }
   }
 }

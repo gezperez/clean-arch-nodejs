@@ -14,6 +14,8 @@ describe('RateService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset the singleton instance to clear the cache
+    RateService.resetInstance();
     rateService = RateService.getInstance();
   });
 

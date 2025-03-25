@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GeminiService } from '../GeminiService';
 import { Category } from '../../../domain/entities/Category';
-import { Expense } from '../../../domain/entities/Expense';
 
 // Mock GoogleGenerativeAI
 jest.mock('@google/generative-ai');
@@ -67,8 +66,8 @@ describe('GeminiService', () => {
   });
 
   describe('createWithAI', () => {
-    const validResponse: Expense = {
-      id: '1',
+    const validResponse = {
+      id: '',
       amount: '50.99',
       name: 'Weekly groceries',
       date: new Date('2024-03-20T10:00:00Z'),
@@ -76,7 +75,7 @@ describe('GeminiService', () => {
       categoryId: '1',
       userId: mockUserId,
       categoryName: 'Groceries',
-      recurrence: 'weekly',
+      recurrence: 'None',
       description: '',
     };
 
@@ -164,6 +163,38 @@ describe('GeminiService', () => {
         ).rejects.toThrow('Invalid amount in AI response');
       });
 
+      it('should handle string amount', async () => {
+        mockGenerateContent.mockResolvedValue({
+          response: {
+            text: () => JSON.stringify({ ...validResponse, amount: '50.99' }),
+          },
+        });
+
+        const result = await service.createWithAI(
+          mockUserId,
+          'test message',
+          mockCategories,
+        );
+
+        expect(result.amount).toBe('50.99');
+      });
+
+      it('should handle numeric amount', async () => {
+        mockGenerateContent.mockResolvedValue({
+          response: {
+            text: () => JSON.stringify({ ...validResponse, amount: 50.99 }),
+          },
+        });
+
+        const result = await service.createWithAI(
+          mockUserId,
+          'test message',
+          mockCategories,
+        );
+
+        expect(result.amount).toBe('50.99');
+      });
+
       it('should throw error for invalid category', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
@@ -206,7 +237,12 @@ describe('GeminiService', () => {
     describe('JSON parsing', () => {
       it('should handle JSON embedded in text', async () => {
         const jsonInText = `Some text before
-          ${JSON.stringify(validResponse)}
+          ${JSON.stringify({
+            ...validResponse,
+            date: new Date('2024-03-20T10:00:00Z').toISOString(),
+            amount: 50.99,
+            category: 'Groceries',
+          })}
           Some text after`;
 
         mockGenerateContent.mockResolvedValue({

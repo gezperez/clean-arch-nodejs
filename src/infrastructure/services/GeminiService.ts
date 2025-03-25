@@ -9,6 +9,9 @@ interface AIExpenseResponse {
   name: string;
   date: string;
   currency?: string;
+  categoryName?: string;
+  recurrence?: string;
+  description?: string;
 }
 
 export class GeminiService implements IAIService {
@@ -63,25 +66,31 @@ export class GeminiService implements IAIService {
     response: AIExpenseResponse,
     categories: Category[],
   ): void {
-    if (
-      typeof response.amount !== 'number' ||
-      isNaN(response.amount) ||
-      response.amount <= 0
-    ) {
+    // First validate the amount
+    const amount =
+      typeof response.amount === 'string'
+        ? parseFloat(response.amount)
+        : response.amount;
+
+    if (isNaN(amount) || amount <= 0) {
       throw new Error('Invalid amount in AI response');
     }
 
+    // Then validate the name
     if (!response.name || typeof response.name !== 'string') {
       throw new Error('Invalid name in AI response');
     }
 
-    if (!categories.some((category) => category.name === response.category)) {
-      throw new Error(`Invalid category: ${response.category}`);
-    }
-
+    // Then validate the date
     const date = new Date(response.date);
     if (isNaN(date.getTime())) {
       throw new Error('Invalid date format in AI response');
+    }
+
+    // Finally validate the category
+    const category = response.category || response.categoryName;
+    if (!categories.some((c) => c.name === category)) {
+      throw new Error(`Invalid category: ${category}`);
     }
   }
 
@@ -129,11 +138,14 @@ export class GeminiService implements IAIService {
     this.validateResponse(parsedResponse, categories);
 
     const category = categories.find(
-      (category) => category.name === parsedResponse.category,
+      (c) =>
+        c.name === (parsedResponse.category || parsedResponse.categoryName),
     );
 
     if (!category) {
-      throw new Error(`Category not found: ${parsedResponse.category}`);
+      throw new Error(
+        `Category not found: ${parsedResponse.category || parsedResponse.categoryName}`,
+      );
     }
 
     return {
@@ -144,9 +156,9 @@ export class GeminiService implements IAIService {
       date: new Date(parsedResponse.date),
       userId,
       name: parsedResponse.name.trim(),
-      currency: parsedResponse.currency,
-      recurrence: 'None',
-      description: '',
+      currency: parsedResponse.currency || 'USD',
+      recurrence: parsedResponse.recurrence || 'None',
+      description: parsedResponse.description || '',
     };
   }
 }

@@ -29,6 +29,9 @@ describe('ExpenseUseCases', () => {
     userId: 'user1',
     date: new Date('2024-03-19'),
     currency: 'USD',
+    categoryName: 'Test category',
+    recurrence: 'monthly',
+    description: 'Test description',
   };
 
   describe('findByFilter', () => {
@@ -86,6 +89,9 @@ describe('ExpenseUseCases', () => {
         userId: 'user1',
         date: new Date('2024-03-19'),
         currency: 'USD',
+        categoryName: 'Test category',
+        recurrence: 'monthly',
+        description: 'Test description',
       };
 
       const createdExpense = { ...newExpense, id: '2' };

@@ -23,7 +23,8 @@ describe('EmailUseCases', () => {
     password: 'hashedPassword',
     name: 'Test User',
     theme: 'light',
-    currencies: ['USD'],
+    currency: 'USD',
+    conversionCurrency: 'EUR',
   };
 
   describe('validateEmail', () => {

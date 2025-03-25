@@ -47,7 +47,8 @@ describe('AuthUseCases', () => {
         password: 'password123',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       const foundUser: User = {
@@ -56,7 +57,8 @@ describe('AuthUseCases', () => {
         password: 'hashedPassword',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       const accessToken = 'access-token';
@@ -96,7 +98,8 @@ describe('AuthUseCases', () => {
         password: 'password123',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       mockUserRepository.findByEmail.mockResolvedValue(null);
@@ -113,7 +116,8 @@ describe('AuthUseCases', () => {
         password: 'wrongpassword',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       const foundUser: User = {
@@ -122,7 +126,8 @@ describe('AuthUseCases', () => {
         password: 'hashedPassword',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       mockUserRepository.findByEmail.mockResolvedValue(foundUser);
@@ -143,7 +148,8 @@ describe('AuthUseCases', () => {
         password: 'hashedPassword',
         name: 'Test User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       const payload = {

@@ -23,11 +23,12 @@ describe('ExpenseUseCases', () => {
 
   const mockExpense: Expense = {
     id: '1',
-    amount: 100,
+    amount: '100',
     name: 'Test expense',
     categoryId: 'cat1',
     userId: 'user1',
     date: new Date('2024-03-19'),
+    currency: 'USD',
   };
 
   describe('findByFilter', () => {
@@ -79,11 +80,12 @@ describe('ExpenseUseCases', () => {
     it('should create a new expense', async () => {
       const newExpense: Expense = {
         id: '',
-        amount: 50,
+        amount: '50',
         name: 'New expense',
         categoryId: 'cat2',
         userId: 'user1',
         date: new Date('2024-03-19'),
+        currency: 'USD',
       };
 
       const createdExpense = { ...newExpense, id: '2' };
@@ -103,7 +105,7 @@ describe('ExpenseUseCases', () => {
     it('should update expense', async () => {
       const updateData: Expense = {
         ...mockExpense,
-        amount: 150,
+        amount: '150',
       };
 
       mockExpenseRepository.findById.mockResolvedValue(mockExpense);

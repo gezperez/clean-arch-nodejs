@@ -14,7 +14,7 @@ describe('RateService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    rateService = new RateService();
+    rateService = RateService.getInstance();
   });
 
   describe('getBlueRate', () => {

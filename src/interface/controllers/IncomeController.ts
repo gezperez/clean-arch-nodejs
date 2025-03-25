@@ -3,23 +3,38 @@ import { IncomeUseCases } from '../../use-cases/IncomeUseCases';
 import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../middleware/error';
 import { CreateIncomeDTO } from '../../domain/dtos/IncomeDTO';
+import { JWTPayload } from '../../domain/entities/JWT';
+
+// Extend Express Request type to include user
+export interface AuthenticatedRequest extends Request {
+  user: JWTPayload;
+}
 
 export class IncomeController {
   constructor(private incomeUseCases: IncomeUseCases) {}
 
-  async findByFilter(req: Request, res: Response, next: NextFunction) {
+  async findByFilter(
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
-      const response = await this.incomeUseCases.findByFilter(req.body);
+      const response = await this.incomeUseCases.findByFilter({
+        ...req.body,
+        userId: req.user.id,
+      });
       res.json(response);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
 
-  async findById(req: Request, res: Response, next: NextFunction) {
+  async find(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
-      const income = await this.incomeUseCases.findById(req.params.id);
+      const income = await this.incomeUseCases.find(
+        req.params.id as string,
+        req.user.id,
+      );
 
       res.json(income);
     } catch (error) {
@@ -27,7 +42,7 @@ export class IncomeController {
     }
   }
 
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const dto = Object.assign(new CreateIncomeDTO(), req.body);
       const errors = await validate(dto);
@@ -36,10 +51,7 @@ export class IncomeController {
         throw new HttpError(400, errors.toString());
       }
 
-      const income = await this.incomeUseCases.create(
-        req.params.id as string,
-        req.body,
-      );
+      const income = await this.incomeUseCases.create(req.user.id, req.body);
 
       res.json(income);
     } catch (error) {
@@ -47,20 +59,19 @@ export class IncomeController {
     }
   }
 
-  async update(req: Request, res: Response, next: NextFunction) {
+  async update(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    console.log(req.user.id);
     try {
-      const income = await this.incomeUseCases.update(
-        req.params.id as string,
-        req.body,
-      );
+      const income = await this.incomeUseCases.update(req.user.id, req.body);
 
       res.json(income);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthenticatedRequest, res: Response, next: NextFunction) {
     try {
       const income = await this.incomeUseCases.delete(req.params.id);
 

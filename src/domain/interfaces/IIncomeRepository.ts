@@ -18,7 +18,11 @@ export interface IIncomeRepository {
     count: number;
     hasMore: boolean;
   }>;
-  findById(incomeId: string): Promise<Income | null>;
+  find({
+    where: { id, userId },
+  }: {
+    where: { id: string; userId: string };
+  }): Promise<Income | null>;
   create(userId: string, income: Income): Promise<Income>;
   update(incomeId: string, income: Income): Promise<Income>;
   delete(incomeId: string): Promise<Income>;

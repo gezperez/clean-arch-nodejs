@@ -51,11 +51,14 @@ export class PrismaExpenseRepository implements IExpenseRepository {
       id: uuidv4(),
       userId,
       categoryId: expense.categoryId,
+      categoryName: expense.categoryName,
       name: expense.name,
       amount: expense.amount,
       date: expense.date ?? new Date(),
       updatedAt: new Date(),
       currency: expense.currency,
+      recurrence: expense.recurrence,
+      description: expense.description ?? '',
     };
 
     return prisma.expense.create({ data });
@@ -70,6 +73,8 @@ export class PrismaExpenseRepository implements IExpenseRepository {
       date: expense.date ?? new Date(),
       updatedAt: new Date(),
       currency: expense.currency,
+      recurrence: expense.recurrence,
+      description: expense.description ?? '',
     };
 
     return prisma.expense.update({

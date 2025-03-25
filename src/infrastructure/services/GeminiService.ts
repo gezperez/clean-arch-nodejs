@@ -32,7 +32,9 @@ export class GeminiService implements IAIService {
         "category": (one of: ${categories.map((category) => category.name).join(', ')}),
         "name": (clear name of the expense),
         "date": (ISO date string, use current date if not specified),
-        "currency": (currency of the expense, use USD if not specified)
+        "currency": (currency of the expense, use USD if not specified),
+        "recurrence": (recurrence of the expense, use "None" if not specified),
+        "description": (description of the expense, use empty string if not specified)
       }
 
       Message: "${message.trim()}"
@@ -138,10 +140,13 @@ export class GeminiService implements IAIService {
       id: '',
       amount: parsedResponse.amount.toString(),
       categoryId: category.id,
+      categoryName: category.name,
       date: new Date(parsedResponse.date),
       userId,
       name: parsedResponse.name.trim(),
       currency: parsedResponse.currency,
+      recurrence: 'None',
+      description: '',
     };
   }
 }

@@ -16,8 +16,10 @@ export class IncomeUseCases {
     return this.incomeRepository.findByFilter(props);
   }
 
-  async findById(id: string): Promise<Income | null> {
-    const foundIncome = await this.incomeRepository.findById(id);
+  async find(userId: string, id: string): Promise<Income | null> {
+    const foundIncome = await this.incomeRepository.find({
+      where: { id, userId },
+    });
 
     if (!foundIncome) {
       throw new HttpError(404, 'Income not found');
@@ -30,14 +32,16 @@ export class IncomeUseCases {
     return this.incomeRepository.create(userId, income);
   }
 
-  async update(id: string, income: Income): Promise<Income> {
-    const foundIncome = await this.incomeRepository.findById(id);
+  async update(userId: string, income: Income): Promise<Income> {
+    const foundIncome = await this.incomeRepository.find({
+      where: { id: income.id, userId },
+    });
 
     if (!foundIncome) {
       throw new HttpError(404, 'Income not found');
     }
 
-    return this.incomeRepository.update(id, income);
+    return this.incomeRepository.update(income.id, income);
   }
 
   async delete(id: string): Promise<Income> {

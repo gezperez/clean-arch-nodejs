@@ -42,8 +42,12 @@ export class PrismaIncomeRepository implements IIncomeRepository {
     };
   }
 
-  async findById(incomeId: string): Promise<Income | null> {
-    const income = await prisma.income.findUnique({ where: { id: incomeId } });
+  async find({
+    where: { id, userId },
+  }: {
+    where: { id: string; userId: string };
+  }): Promise<Income | null> {
+    const income = await prisma.income.findUnique({ where: { id, userId } });
     if (!income) return null;
 
     return income;

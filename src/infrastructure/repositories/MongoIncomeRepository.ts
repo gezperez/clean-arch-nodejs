@@ -45,8 +45,15 @@ export class MongoIncomeRepository implements IIncomeRepository {
     return { data: paginatedData, count, hasMore };
   }
 
-  async findById(incomeId: string): Promise<Income | null> {
-    return IncomeModel.findById(incomeId);
+  async find({
+    where: { id, userId },
+  }: {
+    where: { id: string; userId: string };
+  }): Promise<Income | null> {
+    return IncomeModel.findOne({
+      _id: new mongoose.Types.ObjectId(id),
+      userId: new mongoose.Types.ObjectId(userId),
+    });
   }
 
   async create(userId: string, income: Income): Promise<Income> {

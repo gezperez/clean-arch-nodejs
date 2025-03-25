@@ -43,29 +43,42 @@ export class PrismaIncomeRepository implements IIncomeRepository {
   }
 
   async findById(incomeId: string): Promise<Income | null> {
-    return prisma.income.findUnique({ where: { id: incomeId } });
+    const income = await prisma.income.findUnique({ where: { id: incomeId } });
+    if (!income) return null;
+
+    return income;
   }
 
   async create(userId: string, income: Income): Promise<Income> {
-    return prisma.income.create({
+    const created = await prisma.income.create({
       data: {
         id: uuidv4(),
         userId,
         categoryId: income.categoryId,
+        categoryName: income.categoryName,
         name: income.name,
         amount: income.amount,
-        date: income.date,
+        date: income.date ?? new Date(),
+        currency: income.currency,
+        recurrence: income.recurrence,
+        description: income.description ?? '',
         updatedAt: new Date(),
       },
     });
+
+    return created;
   }
 
   async update(id: string, income: Income): Promise<Income> {
     const data = {
       categoryId: income.categoryId,
+      categoryName: income.categoryName,
       name: income.name,
       amount: income.amount,
       date: income.date,
+      currency: income.currency,
+      recurrence: income.recurrence,
+      description: income.description ?? '',
       updatedAt: new Date(),
     };
 

@@ -8,6 +8,7 @@ interface AIExpenseResponse {
   category: string;
   name: string;
   date: string;
+  currency?: string;
 }
 
 export class GeminiService implements IAIService {
@@ -30,7 +31,8 @@ export class GeminiService implements IAIService {
         "amount": (number without currency symbols),
         "category": (one of: ${categories.map((category) => category.name).join(', ')}),
         "name": (clear name of the expense),
-        "date": (ISO date string, use current date if not specified)
+        "date": (ISO date string, use current date if not specified),
+        "currency": (currency of the expense, use USD if not specified)
       }
 
       Message: "${message.trim()}"
@@ -134,11 +136,12 @@ export class GeminiService implements IAIService {
 
     return {
       id: '',
-      amount: parsedResponse.amount,
+      amount: parsedResponse.amount.toString(),
       categoryId: category.id,
       date: new Date(parsedResponse.date),
       userId,
       name: parsedResponse.name.trim(),
+      currency: parsedResponse.currency,
     };
   }
 }

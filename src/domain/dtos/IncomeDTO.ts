@@ -1,21 +1,39 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateIncomeDTO {
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
+  @Type(() => Date)
+  date: Date;
+
+  @IsNotEmpty()
+  @IsString()
+  currency: string;
+
   @IsNotEmpty()
   @IsString()
   categoryId: string;
 
   @IsNotEmpty()
   @IsString()
+  categoryName: string;
+
+  @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  amount: number;
+  @IsString()
+  amount: string;
 
-  @Type(() => Date)
-  date: Date;
+  @IsNotEmpty()
+  @IsString()
+  recurrence: string;
+
+  description: string;
 }
 
 export class UpdateIncomeDTO extends CreateIncomeDTO {

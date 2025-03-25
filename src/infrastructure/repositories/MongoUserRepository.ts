@@ -27,12 +27,4 @@ export class MongoUserRepository implements IUserRepository {
   async delete(id: string): Promise<User> {
     return UserModel.findByIdAndDelete(id);
   }
-
-  async addCurrency(userId: string, currency: string): Promise<User> {
-    return UserModel.findByIdAndUpdate(userId, { $push: { currencies: currency } }, { new: true });
-  }
-
-  async deleteCurrency(userId: string, currency: string): Promise<User> {
-    return UserModel.findByIdAndUpdate(userId, { $pull: { currencies: currency } }, { new: true });
-  }
 }

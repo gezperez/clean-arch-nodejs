@@ -13,6 +13,7 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:studio": "npx prisma studio",
+    "prisma:format": "npx prisma format",
     "prepare": "husky install",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -25,6 +26,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "@prisma/client": "^6.5.0",
+    "@types/node-cron": "^3.0.11",
     "@types/uuid": "^10.0.0",
     "argon2": "^0.41.1",
     "axios": "^1.7.7",
@@ -34,6 +36,7 @@
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0",
+    "node-cron": "^3.0.3",
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",

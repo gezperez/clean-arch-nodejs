@@ -55,18 +55,21 @@ export class PrismaExpenseRepository implements IExpenseRepository {
       amount: expense.amount,
       date: expense.date ?? new Date(),
       updatedAt: new Date(),
+      currency: expense.currency,
     };
 
     return prisma.expense.create({ data });
   }
 
   async update(id: string, expense: Expense): Promise<Expense> {
+    console.log(expense);
     const data = {
       categoryId: expense.categoryId,
       name: expense.name,
       amount: expense.amount,
       date: expense.date ?? new Date(),
       updatedAt: new Date(),
+      currency: expense.currency,
     };
 
     return prisma.expense.update({

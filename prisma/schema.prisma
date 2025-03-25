@@ -12,7 +12,8 @@ model Expense {
   userId     String
   categoryId String
   name       String
-  amount     Float
+  amount     String
+  currency   String
   date       DateTime
   createdAt  DateTime @default(now())
   updatedAt  DateTime
@@ -21,16 +22,20 @@ model Expense {
 }
 
 model Income {
-  id         String   @id
-  userId     String
-  categoryId String
-  name       String
-  amount     Float
-  date       DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime
-  User       User     @relation(fields: [userId], references: [id])
-  Category   Category @relation(fields: [categoryId], references: [id])
+  id           String   @id
+  userId       String
+  date         DateTime
+  currency     String
+  recurrence   String
+  categoryId   String
+  categoryName String
+  name         String
+  description  String
+  amount       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  User         User     @relation(fields: [userId], references: [id])
+  Category     Category @relation(fields: [categoryId], references: [id])
 }
 
 model RefreshToken {
@@ -46,17 +51,18 @@ model RefreshToken {
 }
 
 model User {
-  id           String         @id
-  email        String         @unique
-  name         String
-  password     String
-  theme        String
-  currencies   String[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime
-  Expense      Expense[]
-  Income       Income[]
-  RefreshToken RefreshToken[]
+  id                 String         @id
+  email              String         @unique
+  name               String
+  password           String
+  theme              String
+  currency           String
+  conversionCurrency String
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime
+  RefreshToken       RefreshToken[]
+  Expense            Expense[]
+  Income             Income[]
 }
 
 model Category {

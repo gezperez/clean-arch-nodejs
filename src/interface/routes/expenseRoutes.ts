@@ -22,7 +22,7 @@ const expenseController = new ExpenseController(expenseUseCases, aiUseCases);
  *       200:
  *         description: Successful response with a list of expenses.
  */
-router.get('/expenses', authenticateToken, (req, res, next) =>
+router.post('/expenses', authenticateToken, (req, res, next) =>
   expenseController.findByFilter(req, res, next),
 );
 

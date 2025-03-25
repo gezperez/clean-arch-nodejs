@@ -31,13 +31,13 @@ export class ExpenseUseCases {
   }
 
   async update(id: string, expense: Expense): Promise<Expense> {
-    const foundExpense = await this.expenseRepository.findById(id);
+    const foundExpense = await this.expenseRepository.findById(expense.id);
 
     if (!foundExpense) {
       throw new HttpError(404, 'Expense not found');
     }
 
-    return this.expenseRepository.update(id, expense);
+    return this.expenseRepository.update(expense.id, expense);
   }
 
   async delete(id: string): Promise<Expense> {

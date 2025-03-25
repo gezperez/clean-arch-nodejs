@@ -13,6 +13,7 @@ import { environment } from './interface/middleware/environment';
 import { PrismaClient } from '@prisma/client';
 import { rateRoutes } from './interface/routes/rateRoutes';
 import { incomeRoutes } from './interface/routes/incomeRoutes';
+import { initializeCronJobs } from './infrastructure/cron';
 
 environment.validate();
 
@@ -50,6 +51,9 @@ app.use('/api', rateRoutes);
 app.use('/api', incomeRoutes);
 
 app.use(errorHandler);
+
+// Initialize cron jobs
+initializeCronJobs();
 
 app.listen(API_PORT, () => {
   console.log(`Server is running on port ${API_PORT}`);

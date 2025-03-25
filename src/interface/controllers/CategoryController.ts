@@ -39,7 +39,6 @@ export class CategoryController {
       const category = await this.categoryUseCases.create(req.body);
       res.status(201).json(category);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

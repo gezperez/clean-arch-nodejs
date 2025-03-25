@@ -42,16 +42,4 @@ router.delete('/users/:id', authenticateToken, (req, res, next) =>
   userController.delete(req, res, next),
 );
 
-router.post(
-  '/users/:id/currencies/:currency',
-  authenticateToken,
-  (req, res, next) => userController.addCurrency(req, res, next),
-);
-
-router.delete(
-  '/users/:id/currencies/:currency',
-  authenticateToken,
-  (req, res, next) => userController.deleteCurrency(req, res, next),
-);
-
 export { router as userRoutes };

@@ -16,6 +16,7 @@ export class ExpenseController {
       const response = await this.expenseUseCases.findByFilter(req.body);
       res.json(response);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -45,7 +46,6 @@ export class ExpenseController {
       );
       res.status(201).json(user);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -58,7 +58,6 @@ export class ExpenseController {
       );
       res.status(201).json(expense);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -72,6 +71,7 @@ export class ExpenseController {
 
       res.json(expense);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

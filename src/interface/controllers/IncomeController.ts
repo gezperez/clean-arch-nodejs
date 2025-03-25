@@ -12,6 +12,7 @@ export class IncomeController {
       const response = await this.incomeUseCases.findByFilter(req.body);
       res.json(response);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }

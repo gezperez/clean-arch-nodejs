@@ -4,7 +4,8 @@ export class Expense {
     public userId: string,
     public categoryId: string,
     public name: string,
-    public amount: number,
+    public amount: string,
     public date: Date,
+    public currency: string,
   ) {}
 }

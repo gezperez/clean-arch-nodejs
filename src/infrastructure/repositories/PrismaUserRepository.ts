@@ -19,8 +19,13 @@ export class PrismaUserRepository implements IUserRepository {
   create(user: User): Promise<User> {
     return prisma.user.create({
       data: {
-        ...user,
         id: uuidv4(),
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        theme: user.theme,
+        currency: user.currency,
+        conversionCurrency: user.conversionCurrency,
         updatedAt: new Date(),
       },
     });
@@ -39,27 +44,6 @@ export class PrismaUserRepository implements IUserRepository {
   delete(id: string): Promise<User> {
     return prisma.user.delete({
       where: { id },
-    });
-  }
-
-  addCurrency(userId: string, currency: string): Promise<User> {
-    return prisma.user.update({
-      where: { id: userId },
-      data: { currencies: { push: currency } },
-    });
-  }
-
-  async deleteCurrency(userId: string, currency: string): Promise<User> {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { currencies: true },
-    });
-
-    const updatedCurrencies = user.currencies.filter((c) => c !== currency);
-
-    return prisma.user.update({
-      where: { id: userId },
-      data: { currencies: updatedCurrencies },
     });
   }
 }

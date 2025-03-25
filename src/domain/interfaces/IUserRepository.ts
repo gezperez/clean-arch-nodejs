@@ -7,6 +7,4 @@ export interface IUserRepository {
   create(user: User): Promise<User>;
   update(id: string, user: User): Promise<User | null>;
   delete(id: string): Promise<User>;
-  addCurrency(userId: string, currency: string): Promise<User>;
-  deleteCurrency(userId: string, currency: string): Promise<User>;
 }

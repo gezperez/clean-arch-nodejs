@@ -1,5 +1,4 @@
 import {
-  IsArray,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -19,9 +18,13 @@ export class CreateUserDTO {
   @IsString()
   theme: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  currencies: string[];
+  @IsNotEmpty()
+  @IsString()
+  currency: string;
+
+  @IsNotEmpty()
+  @IsString()
+  conversionCurrency: string;
 
   @IsNotEmpty()
   @IsStrongPassword({

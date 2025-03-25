@@ -48,7 +48,6 @@ export class UserController {
 
       res.json(authResponse);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -67,30 +66,6 @@ export class UserController {
     try {
       await this.userUseCases.delete(req.query.id as string);
       res.sendStatus(204);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async addCurrency(req: Request, res: Response, next: NextFunction) {
-    try {
-      const user = await this.userUseCases.addCurrency(
-        req.params.id,
-        req.params.currency,
-      );
-      res.json(user);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async deleteCurrency(req: Request, res: Response, next: NextFunction) {
-    try {
-      const user = await this.userUseCases.deleteCurrency(
-        req.params.id,
-        req.params.currency,
-      );
-      res.json(user);
     } catch (error) {
       next(error);
     }

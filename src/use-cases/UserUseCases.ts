@@ -61,12 +61,4 @@ export class UserUseCases {
   async delete(id: string): Promise<User> {
     return this.userRepository.delete(id);
   }
-
-  async addCurrency(userId: string, currency: string): Promise<User> {
-    return this.userRepository.addCurrency(userId, currency);
-  }
-
-  async deleteCurrency(userId: string, currency: string): Promise<User> {
-    return this.userRepository.deleteCurrency(userId, currency);
-  }
 }

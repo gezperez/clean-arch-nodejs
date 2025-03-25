@@ -33,7 +33,8 @@ describe('UserUseCases', () => {
     password: 'hashedPassword',
     name: 'Test User',
     theme: 'light',
-    currencies: ['USD'],
+    currency: 'USD',
+    conversionCurrency: 'EUR',
   };
 
   describe('findAll', () => {
@@ -99,7 +100,8 @@ describe('UserUseCases', () => {
         password: 'password123',
         name: 'New User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       const hashedPassword = 'hashedPassword123';
@@ -131,7 +133,8 @@ describe('UserUseCases', () => {
         password: 'password123',
         name: 'New User',
         theme: 'light',
-        currencies: ['USD'],
+        currency: 'USD',
+        conversionCurrency: 'EUR',
       };
 
       mockUserRepository.findByEmail.mockResolvedValue(mockUser);
@@ -176,36 +179,6 @@ describe('UserUseCases', () => {
 
       expect(result).toEqual(mockUser);
       expect(mockUserRepository.delete).toHaveBeenCalledWith('1');
-    });
-  });
-
-  describe('addCurrency', () => {
-    it('should add currency to user', async () => {
-      const updatedUser = {
-        ...mockUser,
-        currencies: [...mockUser.currencies, 'EUR'],
-      };
-      mockUserRepository.addCurrency.mockResolvedValue(updatedUser);
-
-      const result = await userUseCases.addCurrency('1', 'EUR');
-
-      expect(result).toEqual(updatedUser);
-      expect(mockUserRepository.addCurrency).toHaveBeenCalledWith('1', 'EUR');
-    });
-  });
-
-  describe('deleteCurrency', () => {
-    it('should delete currency from user', async () => {
-      const updatedUser = { ...mockUser, currencies: [] };
-      mockUserRepository.deleteCurrency.mockResolvedValue(updatedUser);
-
-      const result = await userUseCases.deleteCurrency('1', 'USD');
-
-      expect(result).toEqual(updatedUser);
-      expect(mockUserRepository.deleteCurrency).toHaveBeenCalledWith(
-        '1',
-        'USD',
-      );
     });
   });
 });

@@ -5,13 +5,12 @@ import { ConversionRates } from '../../domain/entities/Currency';
 jest.mock('../../infrastructure/services/RateService');
 
 describe('RateUseCases', () => {
-  const MockedRateService = RateService as jest.MockedClass<typeof RateService>;
   let rateUseCases: RateUseCases;
   let mockRateService: jest.Mocked<RateService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockRateService = new MockedRateService() as jest.Mocked<RateService>;
+    mockRateService = jest.mocked(RateService.getInstance());
     rateUseCases = new RateUseCases(mockRateService);
   });
 

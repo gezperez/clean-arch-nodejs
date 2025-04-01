@@ -1,10 +1,11 @@
 import { Category } from '../entities/Category';
-import { Expense } from '../entities/Expense';
+import { Movement, MovementType } from '../entities/Movement';
 
 export interface IAIService {
   createWithAI(
     userId: string,
     message: string,
     categories: Category[],
-  ): Promise<Expense>;
+    type: MovementType,
+  ): Promise<Movement>;
 }

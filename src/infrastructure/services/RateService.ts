@@ -33,7 +33,6 @@ export class RateService implements IRateService {
 
   async getRates(): Promise<ConversionRates> {
     if (this.cachedRates) {
-      logger.debug('Returning cached rates, last updated:', this.lastUpdated);
       return this.cachedRates;
     }
 
@@ -51,7 +50,6 @@ export class RateService implements IRateService {
 
       this.cachedRates = rates;
       this.lastUpdated = new Date();
-      logger.debug('Rates updated at:', this.lastUpdated);
 
       return rates;
     } catch (error) {

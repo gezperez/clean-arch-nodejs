@@ -1,5 +1,5 @@
-import { Expense } from '../entities/Expense';
+import { Movement } from '../entities/Movement';
 
 export interface IAIRepository {
-  generatePrompt(question: string, data: Expense[]): Promise<string>;
+  generatePrompt(question: string, data: Movement[]): Promise<string>;
 }

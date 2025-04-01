@@ -23,7 +23,7 @@ describe('CategoryUseCases', () => {
     name: 'Food',
     iconName: '🍔',
     color: '#FF0000',
-    isIncome: false,
+    type: 'EXPENSE',
   };
 
   describe('findAll', () => {
@@ -64,7 +64,7 @@ describe('CategoryUseCases', () => {
         name: 'Transport',
         iconName: '🚗',
         color: '#00FF00',
-        isIncome: false,
+        type: 'EXPENSE',
       };
 
       const createdCategory = { ...newCategory, id: '2' };

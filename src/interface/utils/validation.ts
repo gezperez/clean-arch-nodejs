@@ -21,3 +21,8 @@ export function formatValidationErrors(
     errors: formattedErrors,
   };
 }
+
+export function isValidYear(year: string): boolean {
+  const yearNum = parseInt(year);
+  return !isNaN(yearNum) && yearNum.toString().length === 4;
+}

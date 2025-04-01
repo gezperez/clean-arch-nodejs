@@ -6,14 +6,14 @@ import { MongoConnection } from './infrastructure/database/MongoDB';
 import { setupSwagger } from './interface/middleware/swagger';
 import { authRoutes } from './interface/routes/authRoutes';
 import { aiRoutes } from './interface/routes/aiRoutes';
-import { expenseRoutes } from './interface/routes/expenseRoutes';
+import { summaryRoutes } from './interface/routes/summaryRoutes';
 import { categoryRoutes } from './interface/routes/categoryRoutes';
 import { errorHandler } from './interface/middleware/error';
 import { environment } from './interface/middleware/environment';
 import { PrismaClient } from '@prisma/client';
 import { rateRoutes } from './interface/routes/rateRoutes';
-import { incomeRoutes } from './interface/routes/incomeRoutes';
 import { initializeCronJobs } from './infrastructure/cron';
+import movementRoutes from './interface/routes/movementRoutes';
 
 environment.validate();
 
@@ -45,10 +45,10 @@ setupSwagger(app);
 app.use('/api', userRoutes);
 app.use('/api', authRoutes);
 app.use('/api', aiRoutes);
-app.use('/api', expenseRoutes);
+app.use('/api', summaryRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', rateRoutes);
-app.use('/api', incomeRoutes);
+app.use('/api', movementRoutes);
 
 app.use(errorHandler);
 

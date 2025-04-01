@@ -14,14 +14,14 @@ describe('GeminiService', () => {
       name: 'Groceries',
       iconName: 'shopping-cart',
       color: '#4CAF50',
-      isIncome: false,
+      type: 'EXPENSE',
     },
     {
       id: '2',
       name: 'Entertainment',
       iconName: 'movie',
       color: '#2196F3',
-      isIncome: false,
+      type: 'EXPENSE',
     },
   ];
 
@@ -93,6 +93,7 @@ describe('GeminiService', () => {
         mockUserId,
         message,
         mockCategories,
+        'EXPENSE',
       );
 
       expect(result).toEqual(validResponse);
@@ -100,13 +101,13 @@ describe('GeminiService', () => {
 
     it('should throw error for empty message', async () => {
       await expect(
-        service.createWithAI(mockUserId, '', mockCategories),
+        service.createWithAI(mockUserId, '', mockCategories, 'EXPENSE'),
       ).rejects.toThrow('Message is required');
     });
 
     it('should throw error for empty categories', async () => {
       await expect(
-        service.createWithAI(mockUserId, 'test message', []),
+        service.createWithAI(mockUserId, 'test message', [], 'EXPENSE'),
       ).rejects.toThrow('Categories are required');
     });
 
@@ -122,6 +123,7 @@ describe('GeminiService', () => {
         mockUserId,
         'test message',
         mockCategories,
+        'EXPENSE',
       );
 
       expect(mockGenerateContent).toHaveBeenCalledTimes(3);
@@ -132,7 +134,12 @@ describe('GeminiService', () => {
       mockGenerateContent.mockRejectedValue(new Error('API Error'));
 
       await expect(
-        service.createWithAI(mockUserId, 'test message', mockCategories),
+        service.createWithAI(
+          mockUserId,
+          'test message',
+          mockCategories,
+          'EXPENSE',
+        ),
       ).rejects.toThrow('API Error');
 
       expect(mockGenerateContent).toHaveBeenCalledTimes(4); // Initial + 3 retries
@@ -147,7 +154,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Invalid amount in AI response');
       });
 
@@ -159,7 +171,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Invalid amount in AI response');
       });
 
@@ -174,6 +191,7 @@ describe('GeminiService', () => {
           mockUserId,
           'test message',
           mockCategories,
+          'EXPENSE',
         );
 
         expect(result.amount).toBe('50.99');
@@ -190,6 +208,7 @@ describe('GeminiService', () => {
           mockUserId,
           'test message',
           mockCategories,
+          'EXPENSE',
         );
 
         expect(result.amount).toBe('50.99');
@@ -204,7 +223,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Invalid category: InvalidCategory');
       });
 
@@ -217,7 +241,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Invalid date format in AI response');
       });
 
@@ -229,7 +258,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Invalid name in AI response');
       });
     });
@@ -253,6 +287,7 @@ describe('GeminiService', () => {
           mockUserId,
           'test message',
           mockCategories,
+          'EXPENSE',
         );
 
         expect(result).toBeDefined();
@@ -265,7 +300,12 @@ describe('GeminiService', () => {
         });
 
         await expect(
-          service.createWithAI(mockUserId, 'test message', mockCategories),
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
         ).rejects.toThrow('Failed to parse AI response: Invalid JSON format');
       });
     });

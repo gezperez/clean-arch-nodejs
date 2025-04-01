@@ -9,6 +9,7 @@ export class AIController {
       const response = await this.aiCases.createWithAI(
         req.params.id,
         req.body.message,
+        req.body.type,
       );
 
       res.json(response);

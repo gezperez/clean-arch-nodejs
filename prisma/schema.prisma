@@ -7,38 +7,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Expense {
-  id           String   @id
-  userId       String
-  date         DateTime
-  currency     String
-  recurrence   String
-  categoryId   String
-  categoryName String
-  name         String
-  description  String
-  amount       String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  User         User     @relation(fields: [userId], references: [id])
-  Category     Category @relation(fields: [categoryId], references: [id])
+enum MovementType {
+  EXPENSE
+  INCOME
 }
 
-model Income {
-  id           String   @id
+model Movement {
+  id           String       @id
   userId       String
-  date         DateTime
   currency     String
   recurrence   String
-  categoryId   String
-  categoryName String
   name         String
   description  String
   amount       String
-  createdAt    DateTime @default(now())
+  type         MovementType
+  createdAt    DateTime     @default(now())
   updatedAt    DateTime
-  User         User     @relation(fields: [userId], references: [id])
-  Category     Category @relation(fields: [categoryId], references: [id])
+  user         User         @relation(fields: [userId], references: [id])
+  category     Category     @relation(fields: [categoryId], references: [id])
+  categoryId   String
+
+  @@index([userId])
+  @@index([categoryId])
 }
 
 model RefreshToken {
@@ -64,18 +54,16 @@ model User {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime
   RefreshToken       RefreshToken[]
-  Expense            Expense[]
-  Income             Income[]
+  movements          Movement[]
 }
 
 model Category {
-  id        String    @id
+  id        String       @id
   name      String
   iconName  String
   color     String
-  createdAt DateTime  @default(now())
+  createdAt DateTime     @default(now())
   updatedAt DateTime
-  Expense   Expense[]
-  isIncome  Boolean   @default(false)
-  Income    Income[]
+  movements Movement[]
+  type      MovementType @default(EXPENSE)
 }

@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Expense } from '../../domain/entities/Expense';
 import { IAIService } from '../../domain/interfaces/IAIService';
 import { Category } from '../../domain/entities/Category';
+import { Movement } from '../../domain/entities/Movement';
+import { MovementType } from '@prisma/client';
 
 interface AIExpenseResponse {
   amount: number;
@@ -9,7 +10,6 @@ interface AIExpenseResponse {
   name: string;
   date: string;
   currency?: string;
-  categoryName?: string;
   recurrence?: string;
   description?: string;
 }
@@ -88,9 +88,12 @@ export class GeminiService implements IAIService {
     }
 
     // Finally validate the category
-    const category = response.category || response.categoryName;
-    if (!categories.some((c) => c.name === category)) {
-      throw new Error(`Invalid category: ${category}`);
+    const categoryName = response.category;
+
+    const category = categories.find((c) => c.name === categoryName);
+
+    if (!category) {
+      throw new Error(`Invalid category: ${categoryName}`);
     }
   }
 
@@ -111,7 +114,8 @@ export class GeminiService implements IAIService {
     userId: string,
     message: string,
     categories: Category[],
-  ): Promise<Expense> {
+    type: MovementType,
+  ): Promise<Movement> {
     if (!message?.trim()) {
       throw new Error('Message is required');
     }
@@ -137,28 +141,24 @@ export class GeminiService implements IAIService {
     const parsedResponse = this.parseAIResponse(result);
     this.validateResponse(parsedResponse, categories);
 
-    const category = categories.find(
-      (c) =>
-        c.name === (parsedResponse.category || parsedResponse.categoryName),
-    );
+    const category = categories.find((c) => c.name === parsedResponse.category);
 
     if (!category) {
-      throw new Error(
-        `Category not found: ${parsedResponse.category || parsedResponse.categoryName}`,
-      );
+      throw new Error(`Category not found: ${parsedResponse.category}`);
     }
 
     return {
       id: '',
       amount: parsedResponse.amount.toString(),
-      categoryId: category.id,
-      categoryName: category.name,
-      date: new Date(parsedResponse.date),
+      createdAt: new Date(parsedResponse.date),
+      updatedAt: new Date(parsedResponse.date),
       userId,
       name: parsedResponse.name.trim(),
       currency: parsedResponse.currency || 'USD',
       recurrence: parsedResponse.recurrence || 'None',
       description: parsedResponse.description || '',
+      categoryId: category.id,
+      type,
     };
   }
 }

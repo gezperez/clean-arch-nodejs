@@ -1,25 +1,30 @@
-import { Expense } from '../domain/entities/Expense';
+import { Movement, MovementType } from '../domain/entities/Movement';
 import { IAIService } from '../domain/interfaces/IAIService';
 import { ICategoryRepository } from '../domain/interfaces/ICategoryRepository';
-import { IExpenseRepository } from '../domain/interfaces/IExpenseRepository';
+import { IMovementRepository } from '../domain/interfaces/IMovementRepository';
 export class AIUseCases {
   constructor(
     private aiService: IAIService,
     private categoryRepository: ICategoryRepository,
-    private expenseRepository: IExpenseRepository,
+    private movementRepository: IMovementRepository,
   ) {}
 
-  async createWithAI(userId: string, message: string): Promise<Expense> {
+  async createWithAI(
+    userId: string,
+    message: string,
+    type: MovementType,
+  ): Promise<Movement> {
     const categories = await this.categoryRepository.findAll();
 
-    const expense = await this.aiService.createWithAI(
+    const movement = await this.aiService.createWithAI(
       userId,
       message,
       categories,
+      type,
     );
 
-    await this.expenseRepository.create(userId, expense);
+    await this.movementRepository.create(userId, movement);
 
-    return expense;
+    return movement;
   }
 }

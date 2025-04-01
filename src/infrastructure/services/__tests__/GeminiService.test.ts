@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GeminiService } from '../GeminiService';
 import { Category } from '../../../domain/entities/Category';
+import { Movement } from '../../../domain/entities/Movement';
 
 // Mock GoogleGenerativeAI
 jest.mock('@google/generative-ai');
@@ -66,23 +67,35 @@ describe('GeminiService', () => {
   });
 
   describe('createWithAI', () => {
-    const validResponse = {
+    const validResponse: Movement = {
       id: '',
       amount: '50.99',
+      createdAt: new Date('2024-03-20T10:00:00Z'),
+      updatedAt: new Date('2024-03-20T10:00:00Z'),
+      userId: mockUserId,
       name: 'Weekly groceries',
-      date: new Date('2024-03-20T10:00:00Z'),
       currency: 'USD',
       categoryId: '1',
-      userId: mockUserId,
-      categoryName: 'Groceries',
       recurrence: 'None',
       description: '',
+      type: 'EXPENSE',
     };
 
     beforeEach(() => {
       // Setup default successful response
       mockGenerateContent.mockResolvedValue({
-        response: { text: () => JSON.stringify(validResponse) },
+        response: {
+          text: () =>
+            JSON.stringify({
+              amount: 50.99,
+              category: 'Groceries',
+              name: 'Weekly groceries',
+              date: '2024-03-20T10:00:00Z',
+              currency: 'USD',
+              recurrence: 'None',
+              description: '',
+            }),
+        },
       });
     });
 
@@ -116,7 +129,18 @@ describe('GeminiService', () => {
         .mockRejectedValueOnce(new Error('API Error'))
         .mockRejectedValueOnce(new Error('API Error'))
         .mockResolvedValueOnce({
-          response: { text: () => JSON.stringify(validResponse) },
+          response: {
+            text: () =>
+              JSON.stringify({
+                amount: 50.99,
+                category: 'Groceries',
+                name: 'Weekly groceries',
+                date: '2024-03-20T10:00:00Z',
+                currency: 'USD',
+                recurrence: 'None',
+                description: '',
+              }),
+          },
         });
 
       const result = await service.createWithAI(
@@ -149,7 +173,13 @@ describe('GeminiService', () => {
       it('should throw error for invalid amount', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
-            text: () => JSON.stringify({ ...validResponse, amount: 'invalid' }),
+            text: () =>
+              JSON.stringify({
+                amount: 'invalid',
+                category: 'Groceries',
+                name: 'Weekly groceries',
+                date: '2024-03-20T10:00:00Z',
+              }),
           },
         });
 
@@ -166,7 +196,13 @@ describe('GeminiService', () => {
       it('should throw error for negative amount', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
-            text: () => JSON.stringify({ ...validResponse, amount: -50 }),
+            text: () =>
+              JSON.stringify({
+                amount: -50,
+                category: 'Groceries',
+                name: 'Weekly groceries',
+                date: '2024-03-20T10:00:00Z',
+              }),
           },
         });
 
@@ -180,45 +216,39 @@ describe('GeminiService', () => {
         ).rejects.toThrow('Invalid amount in AI response');
       });
 
-      it('should handle string amount', async () => {
+      it('should throw error if amount is not a number', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
-            text: () => JSON.stringify({ ...validResponse, amount: '50.99' }),
+            text: () =>
+              JSON.stringify({
+                amount: '50.99',
+                category: 'Groceries',
+                name: 'Weekly groceries',
+                date: '2024-03-20T10:00:00Z',
+              }),
           },
         });
 
-        const result = await service.createWithAI(
-          mockUserId,
-          'test message',
-          mockCategories,
-          'EXPENSE',
-        );
-
-        expect(result.amount).toBe('50.99');
-      });
-
-      it('should handle numeric amount', async () => {
-        mockGenerateContent.mockResolvedValue({
-          response: {
-            text: () => JSON.stringify({ ...validResponse, amount: 50.99 }),
-          },
-        });
-
-        const result = await service.createWithAI(
-          mockUserId,
-          'test message',
-          mockCategories,
-          'EXPENSE',
-        );
-
-        expect(result.amount).toBe('50.99');
+        await expect(
+          service.createWithAI(
+            mockUserId,
+            'test message',
+            mockCategories,
+            'EXPENSE',
+          ),
+        ).rejects.toThrow('Invalid amount in AI response');
       });
 
       it('should throw error for invalid category', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
             text: () =>
-              JSON.stringify({ ...validResponse, category: 'InvalidCategory' }),
+              JSON.stringify({
+                amount: 50.99,
+                category: 'InvalidCategory',
+                name: 'Weekly groceries',
+                date: '2024-03-20T10:00:00Z',
+              }),
           },
         });
 
@@ -236,7 +266,12 @@ describe('GeminiService', () => {
         mockGenerateContent.mockResolvedValue({
           response: {
             text: () =>
-              JSON.stringify({ ...validResponse, date: 'invalid-date' }),
+              JSON.stringify({
+                amount: 50.99,
+                category: 'Groceries',
+                name: 'Weekly groceries',
+                date: 'invalid-date',
+              }),
           },
         });
 
@@ -253,7 +288,13 @@ describe('GeminiService', () => {
       it('should throw error for missing name', async () => {
         mockGenerateContent.mockResolvedValue({
           response: {
-            text: () => JSON.stringify({ ...validResponse, name: '' }),
+            text: () =>
+              JSON.stringify({
+                amount: 50.99,
+                category: 'Groceries',
+                name: '',
+                date: '2024-03-20T10:00:00Z',
+              }),
           },
         });
 
@@ -272,10 +313,13 @@ describe('GeminiService', () => {
       it('should handle JSON embedded in text', async () => {
         const jsonInText = `Some text before
           ${JSON.stringify({
-            ...validResponse,
-            date: new Date('2024-03-20T10:00:00Z').toISOString(),
             amount: 50.99,
             category: 'Groceries',
+            name: 'Weekly groceries',
+            date: '2024-03-20T10:00:00Z',
+            currency: 'USD',
+            recurrence: 'None',
+            description: '',
           })}
           Some text after`;
 

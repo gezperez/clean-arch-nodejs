@@ -67,12 +67,11 @@ export class GeminiService implements IAIService {
     categories: Category[],
   ): void {
     // First validate the amount
-    const amount =
-      typeof response.amount === 'string'
-        ? parseFloat(response.amount)
-        : response.amount;
+    if (typeof response.amount !== 'number') {
+      throw new Error('Invalid amount in AI response: amount must be a number');
+    }
 
-    if (isNaN(amount) || amount <= 0) {
+    if (isNaN(response.amount) || response.amount <= 0) {
       throw new Error('Invalid amount in AI response');
     }
 
